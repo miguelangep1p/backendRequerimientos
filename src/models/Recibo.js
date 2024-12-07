@@ -50,7 +50,6 @@ const Recibo = sequelize.define('Recibo', {
     }
 
 }, {
-
     tableName: 'Recibo',
     timestamps: false
 });

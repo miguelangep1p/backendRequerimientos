@@ -42,7 +42,8 @@ const Deuda = sequelize.define('Deuda', {
         allowNull: false
     }
     
-}, {
+}, 
+{
 
     tableName: 'Deuda',
     timestamps: false

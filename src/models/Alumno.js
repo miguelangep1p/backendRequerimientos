@@ -6,7 +6,6 @@ const sequelize = new Sequelize('database', 'username', 'password', {
 });
 
 const Alumno = sequelize.define('Alumno', {
-    // Define your model attributes here
     idAlumno: {
         type: DataTypes.BIGINT,
         autoIncrement: true,
@@ -55,7 +54,6 @@ const Alumno = sequelize.define('Alumno', {
     }
 
 }, {
-    // Other model options go here
     tableName: 'Alumno',
     timestamps: false
 });

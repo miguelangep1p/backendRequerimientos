@@ -32,7 +32,7 @@ const Asignar_Escala = sequelize.define('Asignar_Escala', {
     fechaAsignacion: {
         type: DataTypes.DATE,
         allowNull: false
-    },
+    }
 }, {
 
     tableName: 'Asignar_Escala',

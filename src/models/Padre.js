@@ -60,7 +60,6 @@ const Padre = sequelize.define('Padre', {
     }
 
 }, {
-    // Other model options go here
     tableName: 'Padre',
     timestamps: false
 });

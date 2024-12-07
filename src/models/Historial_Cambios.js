@@ -31,7 +31,8 @@ const Historial_Cambios = sequelize.define('Historial_Cambios', {
         allowNull: false
     }
 
-}, {
+}, 
+{
     tableName: 'Historial_Cambios',
     timestamps: false
 });

@@ -31,7 +31,7 @@ const Asignar_Concepto = sequelize.define('Asignar_Concepto', {
             model: 'Concepto',
             key: 'idConcepto'
         }
-    },
+    }
 
 }, {
     // Other model options go here

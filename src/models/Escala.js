@@ -27,8 +27,8 @@ const Escala = sequelize.define('Escala', {
         allowNull: false
     }
 
-}, {
-    // Other model options go here
+}, 
+{
     tableName: 'Escala',
     timestamps: false
 });
