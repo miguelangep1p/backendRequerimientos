@@ -59,7 +59,8 @@ const Padre = sequelize.define('Padre', {
         type: DataTypes.TEXT
     }
 
-}, {
+}, 
+{
     tableName: 'Padre',
     timestamps: false
 });

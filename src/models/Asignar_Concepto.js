@@ -34,7 +34,7 @@ const Asignar_Concepto = sequelize.define('Asignar_Concepto', {
     }
 
 }, {
-    // Other model options go here
+   
     tableName: 'Asignar_Concepto',
     timestamps: false
 });

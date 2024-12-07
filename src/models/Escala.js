@@ -29,6 +29,7 @@ const Escala = sequelize.define('Escala', {
 
 }, 
 {
+    
     tableName: 'Escala',
     timestamps: false
 });

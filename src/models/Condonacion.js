@@ -26,6 +26,7 @@ const Condonacion = sequelize.define('Condonacion', {
         allowNull: false
     }
 }, {
+    
     tableName: 'Condonacion',
     timestamps: false
 });

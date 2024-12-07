@@ -44,7 +44,6 @@ const Deuda = sequelize.define('Deuda', {
     
 }, 
 {
-
     tableName: 'Deuda',
     timestamps: false
 });

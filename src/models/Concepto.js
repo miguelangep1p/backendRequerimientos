@@ -23,6 +23,7 @@ const Concepto = sequelize.define('Concepto', {
     }
 
 }, {
+    
     tableName: 'Concepto',
     timestamps: false
 });

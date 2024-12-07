@@ -34,7 +34,6 @@ const Asignar_Escala = sequelize.define('Asignar_Escala', {
         allowNull: false
     }
 }, {
-
     tableName: 'Asignar_Escala',
     timestamps: false
 });
