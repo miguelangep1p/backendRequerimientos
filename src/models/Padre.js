@@ -5,9 +5,9 @@ const sequelize = new Sequelize('database', 'username', 'password', {
     dialect: 'mysql'
 });
 
-const Alumno = sequelize.define('Alumno', {
-    // Define your model attributes here
-    idAlumno: {
+const Padre = sequelize.define('Padre', {
+
+    idPadre: {
         type: DataTypes.BIGINT,
         autoIncrement: true,
         primaryKey: true
@@ -15,9 +15,6 @@ const Alumno = sequelize.define('Alumno', {
     primerNombre: {
         type: DataTypes.TEXT,
         allowNull: false
-    },
-    otrosNombres: {
-        type: DataTypes.TEXT,
     },
 
     ApellidoPaterno: {
@@ -30,34 +27,42 @@ const Alumno = sequelize.define('Alumno', {
         allowNull: false
     },
 
-    anio:{
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
-
-    seccion: {
+    direccion:{
         type: DataTypes.TEXT,
         allowNull: false
     },
 
-    periodo:{
+    telefono: {
         type: DataTypes.TEXT,
         allowNull: false
     },
 
-    estado: {
+    email:{
         type: DataTypes.TEXT,
         allowNull: false
     },
 
-    imagen_perfil:{
+    dni: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
+
+    idAlumno: {
+        type: DataTypes.BIGINT,
+        references: {
+            model: 'Alumno',
+            key: 'idAlumno'
+        }
+    },
+
+    ubicacion:{
         type: DataTypes.TEXT
     }
 
 }, {
     // Other model options go here
-    tableName: 'Alumno',
+    tableName: 'Padre',
     timestamps: false
 });
 
-module.exports = Alumno;
+module.exports = Padre;
