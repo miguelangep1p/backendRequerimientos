@@ -1,21 +1,109 @@
-import Product from '../models/Alumno'
+import Alumno from '../models/Alumno'
+import { DataTypes } from 'sequelize';
 
+export const createAlumnos = async (req, res) => {
+    const {
+        idAlumno,
+        primerNombre,
+        otrosNombres,
+        ApellidoPaterno,
+        ApellidoMaterno,
+        anio,
+        seccion,
+        periodo,
+        estado,
+        imagen_perfil
+    } = req.body;
+    try {
+        const newAlumno = new Alumno({
+            idAlumno,
+            primerNombre,
+            otrosNombres,
+            ApellidoPaterno,
+            ApellidoMaterno,
+            anio,
+            seccion,
+            periodo,
+            estado,
+            imagen_perfil
+        });
+        const AlumnoGuardado = await newAlumno.save();
+        res.status(201).json(AlumnoGuardado);
+    } catch (error) {
+        res.status(500).json({ message: "Error creating student", error });
+    }
+}
 
-export const createAlumnos = (req, res) => {
-    const{name,}
-    console.log(req.body)
-    new Alumno(name: req.body.name)
-    res.json('Creating Alumno')
+export const getAlumnos = async (req, res) => {
+    try {
+        const alumnos = await Alumno.findAll();
+        res.status(200).json(alumnos);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching students", error });
+    }
 }
-export const getAlumnos = (req, res) => {
-    res.json('Get Alumnos')
+
+export const getAlumnosById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const alumno = await Alumno.findByPk(id);
+        if (!alumno) {
+            return res.status(404).json({ message: "Alumno not found" });
+        }
+        res.status(200).json(alumno);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching student by ID", error });
+    }
 }
-export const getAlumnosById = (req, res) => {
-    res.json('Creating Alumno')
+
+export const updateAlumnosById = async (req, res) => {
+    const { id } = req.params;
+    const {
+        primerNombre,
+        otrosNombres,
+        ApellidoPaterno,
+        ApellidoMaterno,
+        anio,
+        seccion,
+        periodo,
+        estado,
+        imagen_perfil
+    } = req.body;
+    
+    try {
+        const alumno = await Alumno.findByPk(id);
+        if (!alumno) {
+            return res.status(404).json({ message: "Alumno not found" });
+        }
+        
+        alumno.primerNombre = primerNombre || alumno.primerNombre;
+        alumno.otrosNombres = otrosNombres || alumno.otrosNombres;
+        alumno.ApellidoPaterno = ApellidoPaterno || alumno.ApellidoPaterno;
+        alumno.ApellidoMaterno = ApellidoMaterno || alumno.ApellidoMaterno;
+        alumno.anio = anio || alumno.anio;
+        alumno.seccion = seccion || alumno.seccion;
+        alumno.periodo = periodo || alumno.periodo;
+        alumno.estado = estado || alumno.estado;
+        alumno.imagen_perfil = imagen_perfil || alumno.imagen_perfil;
+        
+        const AlumnoActualizado = await alumno.save();
+        res.status(200).json(AlumnoActualizado);
+    } catch (error) {
+        res.status(500).json({ message: "Error updating student", error });
+    }
 }
-export const updateAlumnosById = (req, res) => {
-    res.json('Creating Alumno')
-}
-export const deleteAlumnosById = (req, res) => {
-    res.json('Creating Alumno')
+
+export const deleteAlumnosById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const alumno = await Alumno.findByPk(id);
+        if (!alumno) {
+            return res.status(404).json({ message: "Alumno not found" });
+        }
+        
+        await alumno.destroy();
+        res.status(200).json({ message: "Alumno deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Error deleting student", error });
+    }
 }

@@ -1,6 +1,6 @@
-const { Sequelize, DataTypes } = require('sequelize');
+import { Sequelize, DataTypes } from 'sequelize';
 
-const sequelize = new Sequelize('database', 'username', 'password', {
+const sequelize = new Sequelize('tesoreriadb', 'root', '', {
     host: 'localhost',
     dialect: 'mysql'
 });
@@ -59,4 +59,4 @@ const Alumno = sequelize.define('Alumno', {
     timestamps: false
 });
 
-module.exports = Alumno;
+export default Alumno;
