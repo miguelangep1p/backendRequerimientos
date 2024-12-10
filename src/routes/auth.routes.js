@@ -1,25 +1,80 @@
-// In src/routes/auth.routes.js
-const router = express.Router();
+const router = require("express").Router();
+const { register, login } = require("../controllers/auth.controller");
 
-router.get('/login', (req, res) => {
-  res.send('Login route');
-});
+/**
+ * @swagger
+ * tags:
+ *   name: Auth
+ *   description: Endpoints para autenticación de usuarios
+ */
 
-module.exports = router;  // Export the router
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Registrar un nuevo usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "john.doe@example.com"
+ *               businessName:
+ *                 type: string
+ *                 example: "ESCUADRON SECURITY S.A.C."
+ *               name:
+ *                 type: string
+ *                 example: "John Doe"
+ *               jobTitle:
+ *                 type: string
+ *                 example: "Gerente General"
+ *               phone:
+ *                 type: string
+ *                 example: "962028767"
+ *               username:
+ *                 type: string
+ *                 example: "DUCZ69"
+ *               password:
+ *                 type: string
+ *                 example: "password123"
+ *     responses:
+ *       200:
+ *         description: Usuario registrado exitosamente
+ *       400:
+ *         description: Error en la solicitud
+ */
+router.post("/register", register);
 
-// In src/app.js
-const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const AuthRoutes = require('./routes/auth.routes');  // Import the route file
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Iniciar sesión
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "john.doe@example.com"
+ *               password:
+ *                 type: string
+ *                 example: "password123"
+ *     responses:
+ *       200:
+ *         description: Inicio de sesión exitoso
+ *       400:
+ *         description: Error en la solicitud
+ */
+router.post("/login", login);
 
-dotenv.config();
-
-const app = express();
-
-// Use the imported AuthRoutes
-app.use('/api/auth', AuthRoutes);
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+module.exports = { AuthRoutes: router };

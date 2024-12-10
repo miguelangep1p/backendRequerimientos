@@ -1,14 +1,14 @@
-const jwt = require('jsonwebtoken');
-
-module.exports = function (req, res, next) {
-    const token = req.header('auth-token');
-    if (!token) return res.status(401).send('Acceso denegado');
-
-    try {
-        const verified = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = verified;
+// Middleware: Check Roles
+function authorizeRole(roles) {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ message: "Permiso denegado" });
+        }
         next();
-    } catch (err) {
-        res.status(400).send('Token inválido');
-    }
-};
+    };
+}
+
+// Ejemplo de Uso
+app.get('/api/admin', authenticateToken, authorizeRole(['admin']), (req, res) => {
+    res.send("Acceso permitido solo para administradores.");
+});

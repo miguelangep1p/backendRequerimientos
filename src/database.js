@@ -12,7 +12,6 @@ export const sequelize = new Sequelize(DB_DATABASE, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   port: DB_PORT,
   dialect: 'mysql',
-  logging: false, // Opcional, para evitar logs en la consola
 });
 
 // Probar conexión

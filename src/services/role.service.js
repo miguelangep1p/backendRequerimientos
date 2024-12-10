@@ -1,4 +1,4 @@
-const { Role } = require('../models/Role.js');
+const { Role } = require('../models/role.model.js');
 
 const services = {}
 

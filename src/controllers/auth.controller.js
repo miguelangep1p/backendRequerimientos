@@ -2,7 +2,7 @@ const { badRequest, success } = require("../utils/response-types");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Joi = require("joi");
-const { User } = require("../models/User.js");
+const { User } = require("../models/user.model.js");
 const { Op } = require("sequelize");
 
 // Validación para el registro

@@ -142,4 +142,4 @@ router.put('/:id', RoleController.update);
  */
 router.delete('/:id', RoleController.delete);
 
-module.exports = router;
+module.exports = { RoleRoutes: router };

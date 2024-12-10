@@ -1,6 +1,6 @@
-// createDefaultData.js
-const { Role } = require('../models/Role.js'); // Asegúrate de que la ruta a 'models' sea correcta
-const { User } = require('../models/User.js');
+const { Role } = require('../models/role.model.js');
+
+const { User } = require('../models/user.model.js');
 const bcrypt = require("bcryptjs");
 
 async function createDefaultData() {

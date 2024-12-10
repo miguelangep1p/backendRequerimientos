@@ -7,4 +7,4 @@ router.get('/ping', async (req, res) => {
     res.json(result[0])});
 
 
-export default router
+    module.exports = router;
