@@ -59,7 +59,7 @@ const swaggerOptions = {
       version: "1.0.0",
       description: "API de uso sospechoso",
     },
-    servers: [{ url: process.env.URL_API }],
+    servers: [{ url: "http://localhost:3000" }],
   },
   apis: ["./src/routes/*.js"],
 };
