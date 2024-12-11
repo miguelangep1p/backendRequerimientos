@@ -97,25 +97,18 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *   put:
  *     summary: Actualiza una asignación de concepto por su ID
  *     parameters:
- *       - name: id
- *         in: path
+ *       - in: path
+ *         name: id
  *         required: true
- *         description: ID de la asignación de concepto a actualizar
  *         schema:
  *           type: integer
+ *         description: ID de la asignación de concepto a actualizar
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *              type: object
- *             properties:
- *               idEscala:
- *                 type: integer
- *                 example: 2
- *               idConcepto:
- *                 type: integer
- *                 example: 3
+ *             $ref: '#/components/schemas/AsignarConcepto'
  *     responses:
  *       200:
  *         description: Asignación de concepto actualizada exitosamente
@@ -126,7 +119,8 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *       404:
  *         description: Asignación de concepto no encontrada
  */
-router.put('/asignar_concepto/:id', asignarconceptoCtrl.updateAsignarConcepto); 
+router.put('/asignar_concepto/:id', asignarconceptoCtrl.updateAsignarConcepto);
+
 
 /**
  * @swagger
