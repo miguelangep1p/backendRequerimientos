@@ -23,13 +23,16 @@ const User = sequelize.define(
       unique: true,
     },
     roleId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
+      type: DataTypes.BIGINT,
+     references:{
+      model: 'Role',
+      key: 'roleId',
+     }
     },
   },
   {
-    tableName: "users", // Nombre personalizado de la tabla
-    timestamps: true, // Para `createdAt` y `updatedAt`
+    tableName: "users", 
+    timestamps: true, 
   }
 );
 
