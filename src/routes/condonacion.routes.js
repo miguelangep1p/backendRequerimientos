@@ -55,7 +55,7 @@ import *as condonacionCtrl from '../controllers/condonacion.controller'
  *                 $ref: '#/components/schemas/Condonacion'
  */
 
-router.get('/condonaciones', condonacionCtrl.getCondonaciones); 
+router.get('/', condonacionCtrl.getCondonaciones); 
 
 /**
  * @swagger
@@ -79,7 +79,7 @@ router.get('/condonaciones', condonacionCtrl.getCondonaciones);
  *       404:
  *         description: Condonación no encontrada
  */
-router.get('/condonaciones/:id', condonacionCtrl.getCondonacionById); 
+router.get('/:idCondonacion', condonacionCtrl.getCondonacionById); 
 
 /**
  * @swagger
@@ -100,7 +100,7 @@ router.get('/condonaciones/:id', condonacionCtrl.getCondonacionById);
  *             schema:
  *               $ref: '#/components/schemas/Condonacion'
  */
-router.post('/condonaciones', condonacionCtrl.createCondonacion);
+router.post('/', condonacionCtrl.createCondonacion);
 
 /**
  * @swagger
@@ -130,7 +130,7 @@ router.post('/condonaciones', condonacionCtrl.createCondonacion);
  *       404:
  *         description: Condonación no encontrada
  */
-router.put('/condonaciones/:id', condonacionCtrl.updateCondonacion); 
+router.put('/:idCondonacion', condonacionCtrl.updateCondonacion); 
 
 /**
  * @swagger
@@ -151,6 +151,6 @@ router.put('/condonaciones/:id', condonacionCtrl.updateCondonacion);
  *         description: Condonación no encontrada
  */
 
-router.delete('/condonaciones/:id', condonacionCtrl.deleteCondonacion); 
+router.delete('/:idCondonacion', condonacionCtrl.deleteCondonacion); 
 
-export default router;
+module.exports = router;

@@ -64,7 +64,7 @@ import *as detalle_pagoCtrl from '../controllers/detalle_pago.controller'
 
 
 
-router.get('/detalle_pago', detalle_pagoCtrl.getDetallePagos); 
+router.get('/', detalle_pagoCtrl.getDetallePagos); 
 
 /**
  * @swagger
@@ -89,7 +89,7 @@ router.get('/detalle_pago', detalle_pagoCtrl.getDetallePagos);
  *         description: Detalle de pago no encontrado
  */
 
-router.get('/detalle_pago/:id', detalle_pagoCtrl.getDetallePagoById); 
+router.get('/:idDetalle_Pago', detalle_pagoCtrl.getDetallePagoById); 
 
 
 /**
@@ -111,7 +111,7 @@ router.get('/detalle_pago/:id', detalle_pagoCtrl.getDetallePagoById);
  *             schema:
  *               $ref: '#/components/schemas/DetallePago'
  */
-router.post('/detalle_pago', detalle_pagoCtrl.createDetallePago); 
+router.post('/', detalle_pagoCtrl.createDetallePago); 
 
 /**
  * @swagger
@@ -141,7 +141,7 @@ router.post('/detalle_pago', detalle_pagoCtrl.createDetallePago);
  *       404:
  *         description: Detalle de pago no encontrado
  */
-router.put('/detalle_pago/:id', detalle_pagoCtrl.updateDetallePago); 
+router.put('/:idDetalle_Pago', detalle_pagoCtrl.updateDetallePago); 
 
 /**
  * @swagger
@@ -161,6 +161,6 @@ router.put('/detalle_pago/:id', detalle_pagoCtrl.updateDetallePago);
  *       404:
  *         description: Detalle de pago no encontrado
  */
-router.delete('/detalle_pago/:id', detalle_pagoCtrl.deleteDetallePago); 
+router.delete('/:idDetalle_Pago', detalle_pagoCtrl.deleteDetallePago); 
 
-export default router;
+module.exports = router;

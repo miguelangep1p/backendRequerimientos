@@ -54,7 +54,7 @@ import *as conceptoCtrl from '../controllers/concepto.controller'
  *                 $ref: '#/components/schemas/Concepto'
  */
 
-router.get('/concepto', conceptoCtrl.getConceptos); 
+router.get('/', conceptoCtrl.getConceptos); 
 /**
  * @swagger
  * /api/concepto/{id}:
@@ -78,7 +78,7 @@ router.get('/concepto', conceptoCtrl.getConceptos);
  *         description: Concepto no encontrado
  */
 
-router.get('/concepto/:id', conceptoCtrl.getConceptoById); 
+router.get('/:idConcepto', conceptoCtrl.getConceptoById); 
 
 
 /**
@@ -100,7 +100,7 @@ router.get('/concepto/:id', conceptoCtrl.getConceptoById);
  *             schema:
  *               $ref: '#/components/schemas/Concepto'
  */
-router.post('/concepto', conceptoCtrl.createConcepto); 
+router.post('/', conceptoCtrl.createConcepto); 
 
 /**
  * @swagger
@@ -131,7 +131,7 @@ router.post('/concepto', conceptoCtrl.createConcepto);
  *         description: Concepto no encontrado
  */
 
-router.put('/concepto/:id', conceptoCtrl.updateConcepto); 
+router.put('/:idConcepto', conceptoCtrl.updateConcepto); 
 
 /**
  * @swagger
@@ -151,6 +151,6 @@ router.put('/concepto/:id', conceptoCtrl.updateConcepto);
  *       404:
  *         description: Concepto no encontrado
  */
-router.delete('/concepto/:id', conceptoCtrl.deleteConcepto); 
+router.delete('/:idConcepto', conceptoCtrl.deleteConcepto); 
 
-export default router;
+module.exports = router;

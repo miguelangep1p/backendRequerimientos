@@ -1,4 +1,5 @@
 const HistorialCambios = require('../models/Historial_Cambios');
+const Asignar_Escala = require('../models/Asignar_Escala'); // Asegúrate de que este modelo está importado
 
 // Obtener todos los cambios del historial
 const getHistorialCambios = async (req, res) => {
@@ -14,8 +15,8 @@ const getHistorialCambios = async (req, res) => {
 // Obtener un cambio del historial por ID
 const getHistorialCambioById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const historialCambio = await HistorialCambios.findByPk(id);
+        const { idCambio } = req.params;
+        const historialCambio = await HistorialCambios.findByPk(idCambio);
 
         if (!historialCambio) {
             return res.status(404).json({ error: 'Cambio no encontrado en el historial' });
@@ -54,10 +55,10 @@ const createHistorialCambio = async (req, res) => {
 // Actualizar un registro existente en el historial de cambios
 const updateHistorialCambio = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idCambio } = req.params;
         const { idAsignarEscala, descripcion, fechaCambio } = req.body;
 
-        const historialCambio = await HistorialCambios.findByPk(id);
+        const historialCambio = await HistorialCambios.findByPk(idCambio);
 
         if (!historialCambio) {
             return res.status(404).json({ error: 'Cambio no encontrado en el historial' });
@@ -79,9 +80,9 @@ const updateHistorialCambio = async (req, res) => {
 // Eliminar un registro del historial de cambios
 const deleteHistorialCambio = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idCambio } = req.params;
 
-        const historialCambio = await HistorialCambios.findByPk(id);
+        const historialCambio = await HistorialCambios.findByPk(idCambio);
 
         if (!historialCambio) {
             return res.status(404).json({ error: 'Cambio no encontrado en el historial' });
@@ -96,18 +97,26 @@ const deleteHistorialCambio = async (req, res) => {
     }
 };
 
-const historialCambios = await HistorialCambios.findAll({
-    include: {
-        model: Asignar_Escala, // Ajusta según el modelo
-        attributes: ['idAlumno', 'fechaAsignacion'] // Ajusta según las columnas necesarias
+const getHistorialCambiosWithDetails = async (req, res) => {
+    try {
+        const historialCambios = await HistorialCambios.findAll({
+            include: {
+                model: Asignar_Escala, // Ajusta según el modelo
+                attributes: ['idAlumno', 'fechaAsignacion'] // Ajusta según las columnas necesarias
+            }
+        });
+        res.status(200).json(historialCambios);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener el historial de cambios con detalles' });
     }
-});
-
+};
 
 module.exports = {
     getHistorialCambios,
     getHistorialCambioById,
     createHistorialCambio,
     updateHistorialCambio,
-    deleteHistorialCambio
+    deleteHistorialCambio,
+    getHistorialCambiosWithDetails // Exportar la nueva función
 };

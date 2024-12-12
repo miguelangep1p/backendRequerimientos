@@ -97,7 +97,7 @@ import *as notificacionesCtrl from '../controllers/notificaciones.controller'
  *                 $ref: '#/components/schemas/Notificacion'
  */
 
-router.get('/notificaciones', notificacionesCtrl.getNotificaciones); 
+router.get('/', notificacionesCtrl.getNotificaciones); 
 
 /**
  * @swagger
@@ -121,7 +121,7 @@ router.get('/notificaciones', notificacionesCtrl.getNotificaciones);
  *       404:
  *         description: Notificación no encontrada
  */
-router.get('/notificaciones/:id', notificacionesCtrl.getNotificacionById); 
+router.get('/:idNotificacion', notificacionesCtrl.getNotificacionById); 
 
 /**
  * @swagger
@@ -142,7 +142,7 @@ router.get('/notificaciones/:id', notificacionesCtrl.getNotificacionById);
  *             schema:
  *               $ref: '#/components/schemas/Notificacion'
  */
-router.post('/notificaciones', notificacionesCtrl.createNotificacion);
+router.post('/', notificacionesCtrl.createNotificacion);
 
 /**
  * @swagger
@@ -173,7 +173,7 @@ router.post('/notificaciones', notificacionesCtrl.createNotificacion);
  *         description: Notificación no encontrada
  */
 
-router.put('/notificaciones/:id', notificacionesCtrl.updateNotificacion); 
+router.put('/:idNotificacion', notificacionesCtrl.updateNotificacion); 
 
 /**
  * @swagger
@@ -193,6 +193,6 @@ router.put('/notificaciones/:id', notificacionesCtrl.updateNotificacion);
  *       404:
  *         description: Notificación no encontrada
  */
-router.delete('/notificaciones/:id', notificacionesCtrl.deleteNotificacion); 
+router.delete('/:idNotificacion', notificacionesCtrl.deleteNotificacion); 
 
-export default router;
+module.exports = router;

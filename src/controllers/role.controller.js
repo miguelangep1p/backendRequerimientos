@@ -71,7 +71,7 @@ controllers.getAll = async (req, res) => {
 
 controllers.getById = async (req, res) => {
   try {
-    const role = await RoleService.getById(req.params.id);
+    const role = await RoleService.getById(req.params.roleId);
     if (!role) {
       return badRequest(res, "Rol no encontrado")
     }
@@ -89,7 +89,7 @@ controllers.update = async (req, res) => {
 
   try {
     const updated = await RoleService.update(
-      req.params.id,
+      req.params.roleId,
       req.body
     );
     if (updated[0] === 0) {
@@ -103,7 +103,7 @@ controllers.update = async (req, res) => {
 
 controllers.delete = async (req, res) => {
   try {
-    const deleted = await RoleService.delete(req.params.id);
+    const deleted = await RoleService.delete(req.params.roleId);
     if (deleted === 0) {
       return badRequest(res, "Rol no encontrado")
     }

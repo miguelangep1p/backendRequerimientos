@@ -63,7 +63,7 @@ import *as asignar_escalaCtrl from '../controllers/asignar_escala.controller'
  *                 $ref: '#/components/schemas/AsignarEscala'
  */
 
-router.get('/asignar_escala', asignar_escalaCtrl.getAsignarEscalas); 
+router.get('/', asignar_escalaCtrl.getAsignarEscalas); 
 
 /**
  * @swagger
@@ -88,7 +88,7 @@ router.get('/asignar_escala', asignar_escalaCtrl.getAsignarEscalas);
  *         description: Asignación de escala no encontrada
  */
 
-router.get('/asignar_escala/:id', asignar_escalaCtrl.getAsignarEscalaById);
+router.get('/:idAsignarEscala', asignar_escalaCtrl.getAsignarEscalaById);
 
 /**
  * @swagger
@@ -109,7 +109,7 @@ router.get('/asignar_escala/:id', asignar_escalaCtrl.getAsignarEscalaById);
  *             schema:
  *               $ref: '#/components/schemas/AsignarEscala'
  */
-router.post('/asignar_escala', asignar_escalaCtrl.createAsignarEscala); 
+router.post('/', asignar_escalaCtrl.createAsignarEscala); 
 
 /**
  * @swagger
@@ -139,7 +139,7 @@ router.post('/asignar_escala', asignar_escalaCtrl.createAsignarEscala);
  *       404:
  *         description: Asignación de escala no encontrada
  */
-router.put('/asignar_escala/:id', asignar_escalaCtrl.updateAsignarEscala); 
+router.put('/:idAsignarEscala', asignar_escalaCtrl.updateAsignarEscala); 
 
 /**
  * @swagger
@@ -159,6 +159,6 @@ router.put('/asignar_escala/:id', asignar_escalaCtrl.updateAsignarEscala);
  *       404:
  *         description: Asignación de escala no encontrada
  */
-router.delete('/asignar_escala/:id', asignar_escalaCtrl.deleteAsignarEscala); 
+router.delete('/:idAsignarEscala', asignar_escalaCtrl.deleteAsignarEscala); 
 
-export default router;
+module.exports = router;

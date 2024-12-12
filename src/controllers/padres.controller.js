@@ -1,4 +1,6 @@
 const Padre = require('../models/Padre');
+const Alumno = require('../models/Alumno');
+
 
 // Obtener todos los registros
 const getPadres = async (req, res) => {
@@ -14,8 +16,8 @@ const getPadres = async (req, res) => {
 // Obtener un registro por ID
 const getPadreById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const padre = await Padre.findByPk(id);
+        const { idPadre } = req.params;
+        const padre = await Padre.findByPk(idPadre);
 
         if (!padre) {
             return res.status(404).json({ error: 'Registro no encontrado' });
@@ -59,10 +61,10 @@ const createPadre = async (req, res) => {
 // Actualizar un registro existente
 const updatePadre = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idPadre } = req.params;
         const { primerNombre, ApellidoPaterno, ApellidoMaterno, direccion, telefono, email, dni, idAlumno, ubicacion } = req.body;
 
-        const padre = await Padre.findByPk(id);
+        const padre = await Padre.findByPk(idPadre);
 
         if (!padre) {
             return res.status(404).json({ error: 'Registro no encontrado' });
@@ -90,9 +92,9 @@ const updatePadre = async (req, res) => {
 // Eliminar un registro
 const deletePadre = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idPadre } = req.params;
 
-        const padre = await Padre.findByPk(id);
+        const padre = await Padre.findByPk(idPadre);
 
         if (!padre) {
             return res.status(404).json({ error: 'Registro no encontrado' });
@@ -107,18 +109,26 @@ const deletePadre = async (req, res) => {
     }
 };
 
-const padres = await Padre.findAll({
-    include: {
-        model: Alumno,
-        attributes: ['primerNombre', 'apellidoPaterno']
+const getPadresWithDetails = async (req, res) => {
+    try {
+        const padres = await Padre.findAll({
+            include: [{
+                model: Alumno,
+                attributes: ['primerNombre', 'apellidoPaterno']
+            }]
+        });
+        res.status(200).json(padres);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los registros de Padres con detalles' });
     }
-});
-
+};
 
 module.exports = {
     getPadres,
     getPadreById,
     createPadre,
     updatePadre,
-    deletePadre
+    deletePadre,
+    getPadresWithDetails // Exporting the new function
 };

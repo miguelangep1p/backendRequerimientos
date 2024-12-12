@@ -1,4 +1,7 @@
 const Deuda = require('../models/Deuda');
+const Alumno = require('../models/Alumno'); // Asegúrate de que este modelo está importado
+const Asignar_Escala = require('../models/Asignar_Escala'); // Asegúrate de que este modelo está importado
+const Asignar_Concepto = require('../models/Asignar_Concepto'); // Asegúrate de que este modelo está importado
 
 // Obtener todas las deudas
 const getDeudas = async (req, res) => {
@@ -14,8 +17,8 @@ const getDeudas = async (req, res) => {
 // Obtener una deuda por ID
 const getDeudaById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const deuda = await Deuda.findByPk(id);
+        const { idDeuda } = req.params;
+        const deuda = await Deuda.findByPk(idDeuda);
 
         if (!deuda) {
             return res.status(404).json({ error: 'Deuda no encontrada' });
@@ -55,10 +58,10 @@ const createDeuda = async (req, res) => {
 // Actualizar una deuda existente
 const updateDeuda = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idDeuda } = req.params;
         const { idAlumno, idAsignarEscala, idAsignar_Concepto, fecha } = req.body;
 
-        const deuda = await Deuda.findByPk(id);
+        const deuda = await Deuda.findByPk(idDeuda);
 
         if (!deuda) {
             return res.status(404).json({ error: 'Deuda no encontrada' });
@@ -81,9 +84,9 @@ const updateDeuda = async (req, res) => {
 // Eliminar una deuda
 const deleteDeuda = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idDeuda } = req.params;
 
-        const deuda = await Deuda.findByPk(id);
+        const deuda = await Deuda.findByPk(idDeuda);
 
         if (!deuda) {
             return res.status(404).json({ error: 'Deuda no encontrada' });
@@ -97,18 +100,27 @@ const deleteDeuda = async (req, res) => {
         res.status(500).json({ error: 'Error al eliminar la deuda' });
     }
 };
+const getDeudasWithDetails = async (req, res) => {
+    try {
+        const deudas = await Deuda.findAll({
+            include: [
+                { model: Alumno, attributes: ['primerNombre', 'ApellidoPaterno'] },
+                { model: Asignar_Escala, attributes: ['idEscala', 'fechaAsignacion'] },
+                { model: Asignar_Concepto, attributes: ['concepto'] }
+            ]
+        });
+        res.status(200).json(deudas);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener las deudas con detalles' });
+    }
+};
 
-const deudas = await Deuda.findAll({
-    include: [
-        { model: Alumno, attributes: ['primerNombre', 'ApellidoPaterno'] }, 
-        { model: Asignar_Escala, attributes: ['idEscala', 'fechaAsignacion'] },
-        { model: Asignar_Concepto, attributes: ['concepto'] }
-    ]
-});
 module.exports = {
     getDeudas,
     getDeudaById,
     createDeuda,
     updateDeuda,
-    deleteDeuda
+    deleteDeuda,
+    getDeudasWithDetails // Exportar la nueva función
 };

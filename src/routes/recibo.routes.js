@@ -91,7 +91,7 @@ import *as reciboCtrl from '../controllers/recibo.controller'
  *                 $ref: '#/components/schemas/Recibo'
  */
 
-router.get('/recibo', reciboCtrl.getRecibos); 
+router.get('/', reciboCtrl.getRecibos); 
 
 /**
  * @swagger
@@ -116,7 +116,7 @@ router.get('/recibo', reciboCtrl.getRecibos);
  *         description: Recibo no encontrado
  */
 
-router.get('/recibo/:id', reciboCtrl.getReciboById); 
+router.get('/:idRecibo', reciboCtrl.getReciboById); 
 
 /**
  * @swagger
@@ -137,7 +137,7 @@ router.get('/recibo/:id', reciboCtrl.getReciboById);
  *             schema:
  *               $ref: '#/components/schemas/Recibo'
  */
-router.post('/recibo', reciboCtrl.createRecibo); 
+router.post('/', reciboCtrl.createRecibo); 
 
 
 /**
@@ -168,7 +168,7 @@ router.post('/recibo', reciboCtrl.createRecibo);
  *       404:
  *         description: Recibo no encontrado
  */
-router.put('/recibo/:id', reciboCtrl.updateRecibo); 
+router.put('/:idRecibo', reciboCtrl.updateRecibo); 
 
 /**
  * @swagger
@@ -188,6 +188,6 @@ router.put('/recibo/:id', reciboCtrl.updateRecibo);
  *       404:
  *         description: Recibo no encontrado
  */
-router.delete('/recibo/:id', reciboCtrl.deleteRecibo); 
+router.delete('/:idRecibo', reciboCtrl.deleteRecibo); 
 
-export default router;
+module.exports = router;

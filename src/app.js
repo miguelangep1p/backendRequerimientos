@@ -75,9 +75,40 @@ app.get("/", (req, res) => {
 // Rutas
 const { AuthRoutes } = require("./routes/auth.routes");
 const { RoleRoutes } = require('./routes/role.routes');
+const AlumnosRoutes = require('./routes/alumnos.routes');
+const AsignarConceptoRoutes = require('./routes/asignar_concepto.routes');
+const AsignarEscalaRoutes = require('./routes/asignar_escala.routes');
+const ConceptoRoutes = require('./routes/concepto.routes');
+const CondonacionRoutes = require('./routes/condonacion.routes');
+const DetallePagoRoutes = require('./routes/detalle_pago.routes');
+const DeudaRoutes = require('./routes/deuda.routes');
+const EscalaRoutes = require('./routes/escala.routes');
+const HistorialCambiosRoutes = require('./routes/historial_cambios.routes');
+const IndexRoutes = require('./routes/index.routes');
+const NotificacionesRoutes = require('./routes/notificaciones.routes');
+const PadresRoutes = require('./routes/padres.routes');
+const PagoRoutes = require('./routes/pago.routes');
+const ReciboRoutes = require('./routes/recibo.routes');
+const UserRoutes = require('./routes/user.routes');
+
 
 app.use("/api/auth", AuthRoutes);
 app.use('/api/roles', RoleRoutes);
+app.use('/api/alumnos', AlumnosRoutes);
+app.use('/api/asignar-concepto', AsignarConceptoRoutes);
+app.use('/api/asignar-escala', AsignarEscalaRoutes);
+app.use('/api/concepto', ConceptoRoutes);
+app.use('/api/condonacion', CondonacionRoutes);
+app.use('/api/detalle-pago', DetallePagoRoutes);
+app.use('/api/deuda', DeudaRoutes);
+app.use('/api/escala', EscalaRoutes);
+app.use('/api/historial-cambios', HistorialCambiosRoutes);
+app.use('/', IndexRoutes); // Si este es el índice general
+app.use('/api/notificaciones', NotificacionesRoutes);
+app.use('/api/padres', PadresRoutes);
+app.use('/api/pago', PagoRoutes);
+app.use('/api/recibo', ReciboRoutes);
+app.use('/api/users', UserRoutes);
 
 
 module.exports = app;

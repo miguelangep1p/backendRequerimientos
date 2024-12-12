@@ -75,7 +75,7 @@ router.get('/', RoleController.getAll);
  *       400:
  *         description: Error al obtener el rol
  */
-router.get('/:id', RoleController.getById);
+router.get('/:roleId', RoleController.getById);
 
 /**
  * @swagger
@@ -117,7 +117,7 @@ router.get('/:id', RoleController.getById);
  *       400:
  *         description: Error al actualizar el rol
  */
-router.put('/:id', RoleController.update);
+router.put('/:roleId', RoleController.update);
 
 /**
  * @swagger
@@ -140,6 +140,6 @@ router.put('/:id', RoleController.update);
  *       400:
  *         description: Error al eliminar el rol
  */
-router.delete('/:id', RoleController.delete);
+router.delete('/:roleId', RoleController.delete);
 
 module.exports = { RoleRoutes: router };

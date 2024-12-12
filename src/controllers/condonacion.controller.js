@@ -1,4 +1,5 @@
 const Condonacion = require('../models/Condonacion');
+const Deuda = require('../models/Deuda'); // Asegúrate de tener este modelo y que esté correctamente asociado.
 
 const getCondonaciones = async (req, res) => {
     try {
@@ -12,8 +13,8 @@ const getCondonaciones = async (req, res) => {
 
 const getCondonacionById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const condonacion = await Condonacion.findByPk(id);
+        const { idCondonacion } = req.params;
+        const condonacion = await Condonacion.findByPk(idCondonacion);
 
         if (!condonacion) {
             return res.status(404).json({ error: 'Condonación no encontrada' });
@@ -49,10 +50,10 @@ const createCondonacion = async (req, res) => {
 
 const updateCondonacion = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idCondonacion } = req.params;
         const { idDeuda, fecha } = req.body;
 
-        const condonacion = await Condonacion.findByPk(id);
+        const condonacion = await Condonacion.findByPk(idCondonacion);
 
         if (!condonacion) {
             return res.status(404).json({ error: 'Condonación no encontrada' });
@@ -72,9 +73,9 @@ const updateCondonacion = async (req, res) => {
 
 const deleteCondonacion = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idCondonacion } = req.params;
 
-        const condonacion = await Condonacion.findByPk(id);
+        const condonacion = await Condonacion.findByPk(idCondonacion);
 
         if (!condonacion) {
             return res.status(404).json({ error: 'Condonación no encontrada' });
@@ -89,18 +90,27 @@ const deleteCondonacion = async (req, res) => {
     }
 };
 
-const condonaciones = await Condonacion.findAll({
-    include: {
-        model: 'Deuda', 
-        attributes: ['montoTotal', 'fecha', 'estado'] 
+const getAllCondonacionesWithDeuda = async (req, res) => {
+    try {
+        const condonaciones = await Condonacion.findAll({
+            include: {
+                model: Deuda, // Asegúrate de que 'Deuda' sea el modelo correcto asociado en tus definiciones de sequelize
+                attributes: ['montoTotal', 'fecha', 'estado']
+            }
+        });
+        res.status(200).json(condonaciones);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener las condonaciones con detalles de deuda' });
     }
-});
-
+};
 
 module.exports = {
     getCondonaciones,
     getCondonacionById,
     createCondonacion,
     updateCondonacion,
-    deleteCondonacion
+    deleteCondonacion,
+    getAllCondonacionesWithDeuda // Exportar la nueva función
+
 };

@@ -1,4 +1,7 @@
 const Pago = require('../models/Pago');
+const Padre = require('../models/Padre'); // Ensure this model is properly imported
+const Alumno = require('../models/Alumno'); // Ensure this model is properly imported
+const Deuda = require('../models/Deuda'); // Ensure this model is properly imported
 
 // Obtener todos los pagos
 const getPagos = async (req, res) => {
@@ -14,8 +17,8 @@ const getPagos = async (req, res) => {
 // Obtener un pago por ID
 const getPagoById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const pago = await Pago.findByPk(id);
+        const { idPago } = req.params;
+        const pago = await Pago.findByPk(idPago);
 
         if (!pago) {
             return res.status(404).json({ error: 'Pago no encontrado' });
@@ -56,10 +59,10 @@ const createPago = async (req, res) => {
 // Actualizar un pago existente
 const updatePago = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idPago } = req.params;
         const { idPadre, idAlumno, idDeuda, fechaPago, estadoPago } = req.body;
 
-        const pago = await Pago.findByPk(id);
+        const pago = await Pago.findByPk(idPago);
 
         if (!pago) {
             return res.status(404).json({ error: 'Pago no encontrado' });
@@ -83,9 +86,9 @@ const updatePago = async (req, res) => {
 // Eliminar un pago
 const deletePago = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idPago } = req.params;
 
-        const pago = await Pago.findByPk(id);
+        const pago = await Pago.findByPk(idPago);
 
         if (!pago) {
             return res.status(404).json({ error: 'Pago no encontrado' });
@@ -100,19 +103,27 @@ const deletePago = async (req, res) => {
     }
 };
 
-const pagos = await Pago.findAll({
-    include: [
-        { model: Padre, attributes: ['primerNombre', 'apellidoPaterno'] }, // Ajusta según tu modelo
-        { model: Alumno, attributes: ['primerNombre', 'apellidoPaterno'] },
-        { model: Deuda, attributes: ['fecha', 'montoTotal'] }
-    ]
-});
-
+const getPagosWithDetails = async (req, res) => {
+    try {
+        const pagos = await Pago.findAll({
+            include: [
+                { model: Padre, attributes: ['primerNombre', 'apellidoPaterno'] },
+                { model: Alumno, attributes: ['primerNombre', 'apellidoPaterno'] },
+                { model: Deuda, attributes: ['fecha', 'montoTotal'] }
+            ]
+        });
+        res.status(200).json(pagos);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los pagos con detalles' });
+    }
+};
 
 module.exports = {
     getPagos,
     getPagoById,
     createPago,
     updatePago,
-    deletePago
+    deletePago,
+    getPagosWithDetails // Exporting the new function
 };

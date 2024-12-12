@@ -14,8 +14,8 @@ const getAsignarConceptos = async (req, res) => {
 // Obtener un registro por ID
 const getAsignarConceptoById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const asignarConcepto = await AsignarConcepto.findByPk(id);
+        const { idAsignar_Concepto } = req.params;
+        const asignarConcepto = await AsignarConcepto.findByPk(idAsignar_Concepto);
 
         if (!asignarConcepto) {
             return res.status(404).json({ error: 'Registro no encontrado' });
@@ -53,10 +53,10 @@ const createAsignarConcepto = async (req, res) => {
 // Actualizar un registro existente
 const updateAsignarConcepto = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idAsignar_Concepto } = req.params;
         const { concepto, idEscala, idConcepto } = req.body;
 
-        const asignarConcepto = await AsignarConcepto.findByPk(id);
+        const asignarConcepto = await AsignarConcepto.findByPk(idAsignar_Concepto);
 
         if (!asignarConcepto) {
             return res.status(404).json({ error: 'Registro no encontrado' });
@@ -78,9 +78,9 @@ const updateAsignarConcepto = async (req, res) => {
 // Eliminar un registro
 const deleteAsignarConcepto = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idAsignar_Concepto } = req.params;
 
-        const asignarConcepto = await AsignarConcepto.findByPk(id);
+        const asignarConcepto = await AsignarConcepto.findByPk(idAsignar_Concepto);
 
         if (!asignarConcepto) {
             return res.status(404).json({ error: 'Registro no encontrado' });

@@ -1,4 +1,6 @@
 const DetallePago = require('../models/Detalle_Pago');
+const Pago = require('../models/Pago'); // Asegúrate de que este modelo está correctamente importado.
+const Deuda = require('../models/Deuda'); // Asegúrate
 
 const getDetallePagos = async (req, res) => {
     try {
@@ -12,8 +14,8 @@ const getDetallePagos = async (req, res) => {
 
 const getDetallePagoById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const detallePago = await DetallePago.findByPk(id);
+        const { idDetalle_Pago } = req.params;
+        const detallePago = await DetallePago.findByPk(idDetalle_Pago);
 
         if (!detallePago) {
             return res.status(404).json({ error: 'Detalle de pago no encontrado' });
@@ -50,10 +52,10 @@ const createDetallePago = async (req, res) => {
 
 const updateDetallePago = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idDetalle_Pago } = req.params;
         const { idPago, idDeuda, descripcion } = req.body;
 
-        const detallePago = await DetallePago.findByPk(id);
+        const detallePago = await DetallePago.findByPk(idDetalle_Pago);
 
         if (!detallePago) {
             return res.status(404).json({ error: 'Detalle de pago no encontrado' });
@@ -74,7 +76,7 @@ const updateDetallePago = async (req, res) => {
 
 const deleteDetallePago = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idDetalle_Pago } = req.params;
 
         const detallePago = await DetallePago.findByPk(id);
 
@@ -91,18 +93,27 @@ const deleteDetallePago = async (req, res) => {
     }
 };
 
-const detallePagos = await DetallePago.findAll({
-    include: [
-        { model: 'Pago', attributes: ['monto', 'fecha'] },
-        { model: 'Deuda', attributes: ['montoTotal', 'estado'] } 
-    ]
-});
-
+const getAllDetallePagosWithRelations = async (req, res) => {
+    try {
+        const detallePagos = await DetallePago.findAll({
+            include: [
+                { model: Pago, attributes: ['monto', 'fecha'] },
+                { model: Deuda, attributes: ['montoTotal', 'estado'] }
+            ]
+        });
+        res.status(200).json(detallePagos);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los detalles de pagos con relaciones' });
+    }
+};
 
 module.exports = {
     getDetallePagos,
     getDetallePagoById,
     createDetallePago,
     updateDetallePago,
-    deleteDetallePago
+    deleteDetallePago,
+    getAllDetallePagosWithRelations // Exportar la nueva función
+
 };

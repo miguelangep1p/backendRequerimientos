@@ -111,7 +111,7 @@ import *as padresCtrl from '../controllers/padres.controller'
  *                 $ref: '#/components/schemas/Padre'
  */
 
-router.get('/padres', padresCtrl.getPadres); 
+router.get('/', padresCtrl.getPadres); 
 
 /**
  * @swagger
@@ -135,7 +135,7 @@ router.get('/padres', padresCtrl.getPadres);
  *       404:
  *         description: Padre o tutor no encontrado
  */
-router.get('/padres/:id', padresCtrl.getPadreById); 
+router.get('/:idPadre', padresCtrl.getPadreById); 
 
 /**
  * @swagger
@@ -156,7 +156,7 @@ router.get('/padres/:id', padresCtrl.getPadreById);
  *             schema:
  *               $ref: '#/components/schemas/Padre'
  */
-router.post('/padres', padresCtrl.createPadre); 
+router.post('/', padresCtrl.createPadre); 
 
 
 /**
@@ -187,7 +187,7 @@ router.post('/padres', padresCtrl.createPadre);
  *       404:
  *         description: Padre o tutor no encontrado
  */
-router.put('/padres/:id', padresCtrl.updatePadre); 
+router.put('/:idPadre', padresCtrl.updatePadre); 
 
 /**
  * @swagger
@@ -207,6 +207,6 @@ router.put('/padres/:id', padresCtrl.updatePadre);
  *       404:
  *         description: Padre o tutor no encontrado
  */
-router.delete('/padres/:id', padresCtrl.deletePadre); 
+router.delete('/:idPadre', padresCtrl.deletePadre); 
 
-export default router;
+module.exports = router;

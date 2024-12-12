@@ -1,5 +1,4 @@
-import Alumno from '../models/Alumno'
-import { DataTypes } from 'sequelize';
+import Alumno from '../models/Alumno';
 
 export const createAlumnos = async (req, res) => {
     const {
@@ -32,7 +31,7 @@ export const createAlumnos = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error creating student", error });
     }
-}
+};
 
 export const getAlumnos = async (req, res) => {
     try {
@@ -41,23 +40,25 @@ export const getAlumnos = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error fetching students", error });
     }
-}
+};
 
-export const getAlumnosById = async (req, res) => {
-    const { id } = req.params;
+export const getAlumnoById = async (req, res) => {
+    const { idAlumno } = req.params;  // Adjust this line to match the parameter name used in your route
     try {
-        const alumno = await Alumno.findByPk(id);
+        const alumno = await Alumno.findByPk(idAlumno);  // Use findByPk assuming idAlumno is the primary key
         if (!alumno) {
             return res.status(404).json({ message: "Alumno not found" });
         }
         res.status(200).json(alumno);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching student by ID", error });
+        console.error("Error fetching student by ID:", error);  // More detailed logging
+        res.status(500).json({ message: "Error fetching student by ID", error: error.message });
     }
-}
+};
+
 
 export const updateAlumnosById = async (req, res) => {
-    const { id } = req.params;
+    const { idAlumno } = req.params;
     const {
         primerNombre,
         otrosNombres,
@@ -71,7 +72,7 @@ export const updateAlumnosById = async (req, res) => {
     } = req.body;
     
     try {
-        const alumno = await Alumno.findByPk(id);
+        const alumno = await Alumno.findByPk(idAlumno);
         if (!alumno) {
             return res.status(404).json({ message: "Alumno not found" });
         }
@@ -91,12 +92,12 @@ export const updateAlumnosById = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error updating student", error });
     }
-}
+};
 
 export const deleteAlumnosById = async (req, res) => {
-    const { id } = req.params;
+    const { idAlumno } = req.params;
     try {
-        const alumno = await Alumno.findByPk(id);
+        const alumno = await Alumno.findByPk(idAlumno);
         if (!alumno) {
             return res.status(404).json({ message: "Alumno not found" });
         }
@@ -106,4 +107,4 @@ export const deleteAlumnosById = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Error deleting student", error });
     }
-}
+};

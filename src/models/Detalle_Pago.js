@@ -1,10 +1,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('database', 'username', 'password', {
+const sequelize = new Sequelize('tesoreriadb', 'root', '', {
     host: 'localhost',
     dialect: 'mysql'
 });
-
 const Detalle_Pago = sequelize.define('Detalle_Pago', {
 
     idDetalle_Pago: {

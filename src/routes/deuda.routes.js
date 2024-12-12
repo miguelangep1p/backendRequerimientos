@@ -70,7 +70,7 @@ import *as deudaCtrl from '../controllers/deuda.controller'
  *               items:
  *                 $ref: '#/components/schemas/Deuda'
  */
-router.get('/deuda', deudaCtrl.getDeudas); 
+router.get('/', deudaCtrl.getDeudas); 
 
 /**
  * @swagger
@@ -94,7 +94,7 @@ router.get('/deuda', deudaCtrl.getDeudas);
  *       404:
  *         description: Deuda no encontrada
  */
-router.get('/deuda/:id', deudaCtrl.getDeudaById); 
+router.get('/:idDeuda', deudaCtrl.getDeudaById); 
 
 /**
  * @swagger
@@ -115,7 +115,7 @@ router.get('/deuda/:id', deudaCtrl.getDeudaById);
  *             schema:
  *               $ref: '#/components/schemas/Deuda'
  */
-router.post('/deuda', deudaCtrl.createDeuda); 
+router.post('/', deudaCtrl.createDeuda); 
 
 /**
  * @swagger
@@ -145,7 +145,7 @@ router.post('/deuda', deudaCtrl.createDeuda);
  *       404:
  *         description: Deuda no encontrada
  */
-router.put('/deuda/:id', deudaCtrl.updateDeuda); 
+router.put('/:idDeuda', deudaCtrl.updateDeuda); 
 
 /**
  * @swagger
@@ -165,6 +165,6 @@ router.put('/deuda/:id', deudaCtrl.updateDeuda);
  *       404:
  *         description: Deuda no encontrada
  */
-router.delete('/deuda/:id', deudaCtrl.deleteDeuda); 
+router.delete('/:idDeuda', deudaCtrl.deleteDeuda); 
 
-export default router;
+module.exports = router;

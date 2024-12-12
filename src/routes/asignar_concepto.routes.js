@@ -37,7 +37,7 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *               items:
  *                 $ref: '#/components/schemas/AsignarConcepto'
  */
-    router.get('/asignar_concepto', asignarconceptoCtrl.getAsignarConceptos); 
+    router.get('/', asignarconceptoCtrl.getAsignarConceptos); 
 
 /**
  * @swagger
@@ -61,7 +61,7 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *       404:
  *         description: Asignación de concepto no encontrada
  */
-    router.get('/asignar_concepto/:id', asignarconceptoCtrl.getAsignarConceptoById); 
+    router.get('/:idAsignar_Concepto', asignarconceptoCtrl.getAsignarConceptoById); 
 
 /**
  * @swagger
@@ -89,7 +89,7 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *             schema:
  *               $ref: '#/components/schemas/AsignarConcepto'
  */
-    router.post('/asignar_concepto', asignarconceptoCtrl.createAsignarConcepto); 
+    router.post('/', asignarconceptoCtrl.createAsignarConcepto); 
 
 /**
  * @swagger
@@ -119,7 +119,7 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *       404:
  *         description: Asignación de concepto no encontrada
  */
-router.put('/asignar_concepto/:id', asignarconceptoCtrl.updateAsignarConcepto);
+router.put('/:idAsignar_Concepto', asignarconceptoCtrl.updateAsignarConcepto);
 
 
 /**
@@ -140,6 +140,6 @@ router.put('/asignar_concepto/:id', asignarconceptoCtrl.updateAsignarConcepto);
  *       404:
  *         description: Asignación de concepto no encontrada
  */
-router.delete('/asignar_concepto/:id', asignarconceptoCtrl.deleteAsignarConcepto); 
+router.delete('/:idAsignar_Concepto', asignarconceptoCtrl.deleteAsignarConcepto); 
 
-export default router;
+module.exports = router;

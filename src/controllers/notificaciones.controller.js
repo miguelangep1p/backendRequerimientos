@@ -1,4 +1,7 @@
 const Notificaciones = require('../models/Notificaciones');
+const Alumno = require('../models/Alumno'); // Asegúrate de que este modelo está importado
+const Padre = require('../models/Padre'); // Asegúrate de que este modelo está importado
+const Deuda = require('../models/Deuda');
 
 // Obtener todas las notificaciones
 const getNotificaciones = async (req, res) => {
@@ -14,8 +17,8 @@ const getNotificaciones = async (req, res) => {
 // Obtener una notificación por ID
 const getNotificacionById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const notificacion = await Notificaciones.findByPk(id);
+        const { idNotificacion } = req.params;
+        const notificacion = await Notificaciones.findByPk(idNotificacion);
 
         if (!notificacion) {
             return res.status(404).json({ error: 'Notificación no encontrada' });
@@ -58,10 +61,10 @@ const createNotificacion = async (req, res) => {
 // Actualizar una notificación existente
 const updateNotificacion = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idNotificacion } = req.params;
         const { idAlumno, idPadre, idDeuda, tipo, descripcion, fechaNotificacion, estado } = req.body;
 
-        const notificacion = await Notificaciones.findByPk(id);
+        const notificacion = await Notificaciones.findByPk(idNotificacion);
 
         if (!notificacion) {
             return res.status(404).json({ error: 'Notificación no encontrada' });
@@ -87,9 +90,9 @@ const updateNotificacion = async (req, res) => {
 // Eliminar una notificación
 const deleteNotificacion = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idNotificacion } = req.params;
 
-        const notificacion = await Notificaciones.findByPk(id);
+        const notificacion = await Notificaciones.findByPk(idNotificacion);
 
         if (!notificacion) {
             return res.status(404).json({ error: 'Notificación no encontrada' });
@@ -103,19 +106,27 @@ const deleteNotificacion = async (req, res) => {
         res.status(500).json({ error: 'Error al eliminar la notificación' });
     }
 };
-const notificaciones = await Notificaciones.findAll({
-    include: [
-        { model: Alumno, attributes: ['primerNombre', 'apellidoPaterno'] }, // Ajusta según el modelo
-        { model: Padre, attributes: ['primerNombre', 'apellidoPaterno'] },
-        { model: Deuda, attributes: ['fecha', 'montoTotal'] }
-    ]
-});
-
+const getNotificacionesWithDetails = async (req, res) => {
+    try {
+        const notificaciones = await Notificaciones.findAll({
+            include: [
+                { model: Alumno, attributes: ['primerNombre', 'apellidoPaterno'] }, // Ajusta según el modelo
+                { model: Padre, attributes: ['primerNombre', 'apellidoPaterno'] },
+                { model: Deuda, attributes: ['fecha', 'montoTotal'] }
+            ]
+        });
+        res.status(200).json(notificaciones);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener las notificaciones con detalles' });
+    }
+};
 
 module.exports = {
     getNotificaciones,
     getNotificacionById,
     createNotificacion,
     updateNotificacion,
-    deleteNotificacion
+    deleteNotificacion,
+    getNotificacionesWithDetails // Exportar la nueva función
 };

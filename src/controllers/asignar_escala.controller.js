@@ -1,4 +1,7 @@
 const AsignarEscala = require('../models/Asignar_Escala');
+const Escala = require('../models/Escala'); // Asegúrate de tener este modelo
+const Concepto = require('../models/Concepto'); // Asegúrate de tener este modelo
+
 
 // Obtener todas las asignaciones
 const getAsignarEscalas = async (req, res) => {
@@ -14,8 +17,8 @@ const getAsignarEscalas = async (req, res) => {
 // Obtener una asignación por ID
 const getAsignarEscalaById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const asignarEscala = await AsignarEscala.findByPk(id);
+        const { idAsignarEscala } = req.params;
+        const asignarEscala = await AsignarEscala.findByPk(idAsignarEscala);
 
         if (!asignarEscala) {
             return res.status(404).json({ error: 'Asignación no encontrada' });
@@ -54,10 +57,10 @@ const createAsignarEscala = async (req, res) => {
 // Actualizar una asignación existente
 const updateAsignarEscala = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idAsignarEscala } = req.params;
         const { idAlumno, idEscala, fechaAsignacion } = req.body;
 
-        const asignarEscala = await AsignarEscala.findByPk(id);
+        const asignarEscala = await AsignarEscala.findByPk(idAsignarEscala);
 
         if (!asignarEscala) {
             return res.status(404).json({ error: 'Asignación no encontrada' });
@@ -79,9 +82,9 @@ const updateAsignarEscala = async (req, res) => {
 // Eliminar una asignación
 const deleteAsignarEscala = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idAsignarEscala } = req.params;
 
-        const asignarEscala = await AsignarEscala.findByPk(id);
+        const asignarEscala = await AsignarEscala.findByPk(idAsignarEscala);
 
         if (!asignarEscala) {
             return res.status(404).json({ error: 'Asignación no encontrada' });
@@ -96,13 +99,20 @@ const deleteAsignarEscala = async (req, res) => {
     }
 };
 
-const asignarConceptos = await AsignarConcepto.findAll({
-    include: [
-        { model: Escala, attributes: ['nombreEscala'] },
-        { model: Concepto, attributes: ['nombreConcepto'] }
-    ]
-});
-
+const getAsignarConceptos = async (req, res) => {
+    try {
+        const asignarConceptos = await AsignarEscala.findAll({
+            include: [
+                { model: Escala, attributes: ['nombreEscala'] },
+                { model: Concepto, attributes: ['nombreConcepto'] }
+            ]
+        });
+        res.status(200).json(asignarConceptos);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener conceptos y escalas asignadas' });
+    }
+};
 
 
 module.exports = {
@@ -110,5 +120,6 @@ module.exports = {
     getAsignarEscalaById,
     createAsignarEscala,
     updateAsignarEscala,
-    deleteAsignarEscala
+    deleteAsignarEscala,
+    getAsignarConceptos 
 };

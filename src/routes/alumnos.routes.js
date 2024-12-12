@@ -1,7 +1,8 @@
 import {Router}from 'express'
 
-const router = Router()
 import *as alumnosCtrl from '../controllers/alumnos.controller'
+
+const router = Router()
 
 /**
  * @swagger
@@ -158,7 +159,7 @@ import *as alumnosCtrl from '../controllers/alumnos.controller'
  *       404:
  *         description: Alumno no encontrado
  */
-    router.get('/:alumnoId', alumnosCtrl.getAlumnosById)
+    router.get('/:idAlumno', alumnosCtrl.getAlumnoById)
 
 /**
  * @swagger
@@ -188,7 +189,7 @@ import *as alumnosCtrl from '../controllers/alumnos.controller'
  *       404:
  *         description: Alumno no encontrado
  */
-    router.put('/:alumnoId', alumnosCtrl.updateAlumnosById)
+    router.put('/:idAlumno', alumnosCtrl.updateAlumnosById)
 
 /**
  * @swagger
@@ -208,6 +209,6 @@ import *as alumnosCtrl from '../controllers/alumnos.controller'
  *       404:
  *         description: Alumno no encontrado
  */
-    router.delete('/:alumnoId', alumnosCtrl.deleteAlumnosById)
+    router.delete('/:idAlumno', alumnosCtrl.deleteAlumnosById)
 
-export default router;
+    module.exports = router;

@@ -14,8 +14,8 @@ const getConceptos = async (req, res) => {
 // Obtener un registro por ID
 const getConceptoById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const concepto = await Concepto.findByPk(id);
+        const { idConcepto } = req.params;
+        const concepto = await Concepto.findByPk(idConcepto);
 
         if (!concepto) {
             return res.status(404).json({ error: 'Concepto no encontrado' });
@@ -53,10 +53,10 @@ const createConcepto = async (req, res) => {
 // Actualizar un registro existente
 const updateConcepto = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idConcepto } = req.params;
         const { concepto, descripcion } = req.body;
 
-        const conceptoExistente = await Concepto.findByPk(id);
+        const conceptoExistente = await Concepto.findByPk(idConcepto);
 
         if (!conceptoExistente) {
             return res.status(404).json({ error: 'Concepto no encontrado' });
@@ -77,9 +77,9 @@ const updateConcepto = async (req, res) => {
 // Eliminar un registro
 const deleteConcepto = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idConcepto } = req.params;
 
-        const concepto = await Concepto.findByPk(id);
+        const concepto = await Concepto.findByPk(idConcepto);
 
         if (!concepto) {
             return res.status(404).json({ error: 'Concepto no encontrado' });

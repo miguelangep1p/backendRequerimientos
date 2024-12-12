@@ -14,8 +14,8 @@ const getRecibos = async (req, res) => {
 // Obtener un recibo por ID
 const getReciboById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const recibo = await Recibo.findByPk(id);
+        const { idRecibo } = req.params;
+        const recibo = await Recibo.findByPk(idRecibo);
 
         if (!recibo) {
             return res.status(404).json({ error: 'Recibo no encontrado' });
@@ -57,10 +57,10 @@ const createRecibo = async (req, res) => {
 // Actualizar un recibo existente
 const updateRecibo = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idRecibo } = req.params;
         const { idAlumno, idDeuda, formaPago, nOperacion, fechaEmision, importe } = req.body;
 
-        const recibo = await Recibo.findByPk(id);
+        const recibo = await Recibo.findByPk(idRecibo);
 
         if (!recibo) {
             return res.status(404).json({ error: 'Recibo no encontrado' });
@@ -85,9 +85,9 @@ const updateRecibo = async (req, res) => {
 // Eliminar un recibo
 const deleteRecibo = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idRecibo } = req.params;
 
-        const recibo = await Recibo.findByPk(id);
+        const recibo = await Recibo.findByPk(idRecibo);
 
         if (!recibo) {
             return res.status(404).json({ error: 'Recibo no encontrado' });
@@ -102,18 +102,26 @@ const deleteRecibo = async (req, res) => {
     }
 };
 
-const recibos = await Recibo.findAll({
-    include: [
-        { model: Alumno, attributes: ['primerNombre', 'apellidoPaterno'] }, // Ajusta según tu modelo
-        { model: Deuda, attributes: ['fecha', 'montoTotal'] }
-    ]
-});
-
+const getRecibosWithDetails = async (req, res) => {
+    try {
+        const recibos = await Recibo.findAll({
+            include: [
+                { model: Alumno, attributes: ['primerNombre', 'apellidoPaterno'] },
+                { model: Deuda, attributes: ['fecha', 'montoTotal'] }
+            ]
+        });
+        res.status(200).json(recibos);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener los recibos con detalles' });
+    }
+};
 
 module.exports = {
     getRecibos,
     getReciboById,
     createRecibo,
     updateRecibo,
-    deleteRecibo
+    deleteRecibo,
+    getRecibosWithDetails // Exporting the new function
 };

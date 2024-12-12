@@ -1,4 +1,6 @@
 const Escala = require('../models/Escala');
+const Asignar_Escala = require('../models/Asignar_Escala'); // Asegúrate de que este modelo está importado
+const Asignar_Concepto = require('../models/Asignar_Concepto');
 
 // Obtener todas las escalas
 const getEscalas = async (req, res) => {
@@ -14,8 +16,8 @@ const getEscalas = async (req, res) => {
 // Obtener una escala por ID
 const getEscalaById = async (req, res) => {
     try {
-        const { id } = req.params;
-        const escala = await Escala.findByPk(id);
+        const { idEscala } = req.params;
+        const escala = await Escala.findByPk(idEscala);
 
         if (!escala) {
             return res.status(404).json({ error: 'Escala no encontrada' });
@@ -54,10 +56,10 @@ const createEscala = async (req, res) => {
 // Actualizar una escala existente
 const updateEscala = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idEscala } = req.params;
         const { escala, descripcion, monto } = req.body;
 
-        const escalaExistente = await Escala.findByPk(id);
+        const escalaExistente = await Escala.findByPk(idEscala);
 
         if (!escalaExistente) {
             return res.status(404).json({ error: 'Escala no encontrada' });
@@ -79,9 +81,9 @@ const updateEscala = async (req, res) => {
 // Eliminar una escala
 const deleteEscala = async (req, res) => {
     try {
-        const { id } = req.params;
+        const { idEscala } = req.params;
 
-        const escala = await Escala.findByPk(id);
+        const escala = await Escala.findByPk(idEscala);
 
         if (!escala) {
             return res.status(404).json({ error: 'Escala no encontrada' });
@@ -95,18 +97,26 @@ const deleteEscala = async (req, res) => {
         res.status(500).json({ error: 'Error al eliminar la escala' });
     }
 };
-const escalas = await Escala.findAll({
-    include: [
-        { model: 'Asignar_Escala', attributes: ['idAsignarEscala'] }, // Ajusta según las columnas necesarias
-        { model: 'Asignar_Concepto', attributes: ['concepto'] }
-    ]
-});
-
+const getEscalasWithDetails = async (req, res) => {
+    try {
+        const escalas = await Escala.findAll({
+            include: [
+                { model: Asignar_Escala, attributes: ['idAsignarEscala'] }, // Ajusta según las columnas necesarias
+                { model: Asignar_Concepto, attributes: ['concepto'] }
+            ]
+        });
+        res.status(200).json(escalas);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener las escalas con detalles' });
+    }
+};
 
 module.exports = {
     getEscalas,
     getEscalaById,
     createEscala,
     updateEscala,
-    deleteEscala
+    deleteEscala,
+    getEscalasWithDetails // Exportar la nueva función
 };

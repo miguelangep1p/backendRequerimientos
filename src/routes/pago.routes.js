@@ -79,7 +79,7 @@ import *as pagoCtrl from '../controllers/pago.controller'
  *                 $ref: '#/components/schemas/Pago'
  */
 
-router.get('/pago', pagoCtrl.getPagos); 
+router.get('/', pagoCtrl.getPagos); 
 
 /**
  * @swagger
@@ -103,7 +103,7 @@ router.get('/pago', pagoCtrl.getPagos);
  *       404:
  *         description: Pago no encontrado
  */
-router.get('/pago/:id', pagoCtrl.getPagoById); 
+router.get('/:idPago', pagoCtrl.getPagoById); 
 
 
 /**
@@ -125,7 +125,7 @@ router.get('/pago/:id', pagoCtrl.getPagoById);
  *             schema:
  *               $ref: '#/components/schemas/Pago'
  */
-router.post('/pago', pagoCtrl.createPago);
+router.post('/', pagoCtrl.createPago);
 
 /**
  * @swagger
@@ -155,7 +155,7 @@ router.post('/pago', pagoCtrl.createPago);
  *       404:
  *         description: Pago no encontrado
  */
-router.put('/pago/:id', pagoCtrl.updatePago); 
+router.put('/:idPago', pagoCtrl.updatePago); 
 
 /**
  * @swagger
@@ -175,6 +175,6 @@ router.put('/pago/:id', pagoCtrl.updatePago);
  *       404:
  *         description: Pago no encontrado
  */
-router.delete('/pago/:id', pagoCtrl.deletePago); 
+router.delete('/:idPago', pagoCtrl.deletePago); 
 
-export default router;
+module.exports = router;

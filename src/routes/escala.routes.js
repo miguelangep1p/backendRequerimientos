@@ -62,7 +62,7 @@ import *as escalaCtrl from '../controllers/escala.controller'
  *               items:
  *                 $ref: '#/components/schemas/Escala'
  */
-router.get('/escala', escalaCtrl.getEscalas); 
+router.get('/', escalaCtrl.getEscalas); 
 
 /**
  * @swagger
@@ -86,7 +86,7 @@ router.get('/escala', escalaCtrl.getEscalas);
  *       404:
  *         description: Escala no encontrada
  */
-router.get('/escala/:id', escalaCtrl.getEscalaById); 
+router.get('/:idEscala', escalaCtrl.getEscalaById); 
 
 /**
  * @swagger
@@ -107,7 +107,7 @@ router.get('/escala/:id', escalaCtrl.getEscalaById);
  *             schema:
  *               $ref: '#/components/schemas/Escala'
  */
-router.post('/escala', escalaCtrl.createEscala); 
+router.post('/', escalaCtrl.createEscala); 
 
 /**
  * @swagger
@@ -137,7 +137,7 @@ router.post('/escala', escalaCtrl.createEscala);
  *       404:
  *         description: Escala no encontrada
  */
-router.put('/escala/:id', escalaCtrl.updateEscala); 
+router.put('/:idEscala', escalaCtrl.updateEscala); 
 
 /**
  * @swagger
@@ -157,6 +157,6 @@ router.put('/escala/:id', escalaCtrl.updateEscala);
  *       404:
  *         description: Escala no encontrada
  */
-router.delete('/escala/:id', escalaCtrl.deleteEscala); 
+router.delete('/:idEscala', escalaCtrl.deleteEscala); 
 
-export default router;
+module.exports = router;
