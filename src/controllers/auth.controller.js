@@ -1,9 +1,10 @@
-const { badRequest, success } = require("../utils/response-types");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const Joi = require("joi");
-const { User } = require("../models/user.model.js");
-const { Op } = require("sequelize");
+import { badRequest, success } from "../utils/response-types";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import Joi from "joi";
+import { User } from "../models/user.model.js";
+import { Role } from "../models/role.model.js"; // Ajusta la ruta según tu estructura de directorios
+import { Op } from "sequelize";
 
 // Validación para el registro
 const registerSchema = Joi.object({
@@ -20,7 +21,7 @@ const registerSchema = Joi.object({
   }),
 });
 
-exports.register = async (req, res) => {
+export const register = async (req, res) => {
   // Validar los datos antes de crear un usuario
   const { error } = registerSchema.validate(req.body);
   if (error) return badRequest(res, error.details[0].message);
@@ -43,23 +44,23 @@ exports.register = async (req, res) => {
     email,
     username,
     password: hashedPassword,
+    roleId: 1,
   });
 
   try {
     const savedUser = await user.save();
     success(res, {
-      ...savedUser.dataValues,
-      password: null,
+      ...savedUser.dataValues
     });
   } catch (err) {
     res.status(400).send(err);
   }
 };
 
-// Validación para el inicio de sesión
 const loginSchema = Joi.object({
-  usernameOrEmail: Joi.string().required().messages({
-    "any.required": "El correo electrónico o nombre de usuario es obligatorio.",
+  email: Joi.string().min(3).max(255).required().messages({
+    "string.min": "El correo debe tener al menos {#limit} caracteres.",
+    "any.required": "El correo electrónico o usuario es obligatorio.",
   }),
   password: Joi.string().min(6).max(1024).required().messages({
     "string.min": "La contraseña debe tener al menos {#limit} caracteres.",
@@ -71,16 +72,18 @@ exports.login = async (req, res) => {
   const { error } = loginSchema.validate(req.body);
   if (error) return badRequest(res, error.details[0].message);
 
-  const { usernameOrEmail, password } = req.body;
+  const { email, password } = req.body;
 
-  // Verificar si el usuario existe por correo o nombre de usuario
+  // Verificar si el email existe
   const user = await User.findOne({
-    where: {
-      [Op.or]: [{ email: usernameOrEmail }, { username: usernameOrEmail }],
-    },
-  });
-
-  if (!user) return badRequest(res, "Usuario no registrado");
+  where: {
+    [Op.or]: [
+      { email },
+      { username: email }
+    ]
+  }
+});
+  if (!user) return badRequest(res, "Aún no estas registrado");
 
   // Verificar la contraseña
   const validPass = await bcrypt.compare(password, user.password);
@@ -90,10 +93,14 @@ exports.login = async (req, res) => {
   const userWithoutPassword = user.toJSON();
   delete userWithoutPassword.password;
 
+  // Informacion de rol del usuario
+  const role = await Role.findOne({ where: { roleId: user.roleId } })
+
   // Crear y asignar un token
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
   success(res.header("auth-token", token), {
     token,
     user: userWithoutPassword,
+    role,
   });
 };
