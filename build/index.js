@@ -1,7 +1,7 @@
 "use strict";
 
-var _express = _interopRequireDefault(require("express"));
+var _app = _interopRequireDefault(require("./app"));
+var _config = require("./config.js");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { "default": e }; }
-var app = (0, _express["default"])();
-app.listen(3000);
-console.log('Hello World', 3000);
+_app["default"].listen(_config.PORT);
+console.log('listening on port', _config.PORT);
