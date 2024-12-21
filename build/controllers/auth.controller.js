@@ -4,7 +4,7 @@ function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.register = void 0;
+exports.register = exports.getAllUsers = void 0;
 var _responseTypes = require("../utils/response-types");
 var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
@@ -195,5 +195,43 @@ exports.login = /*#__PURE__*/function () {
   }));
   return function (_x3, _x4) {
     return _ref2.apply(this, arguments);
+  };
+}();
+var getAllUsers = exports.getAllUsers = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req, res) {
+    var users;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return _userModel.User.findAll({
+            attributes: {
+              exclude: ['password']
+            } // Excluir la contraseña por seguridad
+          });
+        case 3:
+          users = _context3.sent;
+          if (users.length > 0) {
+            (0, _responseTypes.success)(res, users);
+          } else {
+            (0, _responseTypes.badRequest)(res, "No se encontraron usuarios.");
+          }
+          _context3.next = 10;
+          break;
+        case 7:
+          _context3.prev = 7;
+          _context3.t0 = _context3["catch"](0);
+          res.status(500).send({
+            message: "Error al obtener los usuarios: " + _context3.t0.message
+          });
+        case 10:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[0, 7]]);
+  }));
+  return function getAllUsers(_x5, _x6) {
+    return _ref3.apply(this, arguments);
   };
 }();
