@@ -272,11 +272,63 @@ var getPagosWithDetails = /*#__PURE__*/function () {
     return _ref6.apply(this, arguments);
   };
 }();
+var pagarDeuda = /*#__PURE__*/function () {
+  var _ref7 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee7(req, res) {
+    var idDeuda, fecha, connection;
+    return _regeneratorRuntime().wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          idDeuda = req.body.idDeuda;
+          fecha = req.body.fecha; // Validar que los datos obligatorios están presentes
+          if (!(!idDeuda || !fecha)) {
+            _context7.next = 4;
+            break;
+          }
+          return _context7.abrupt("return", res.status(400).json({
+            error: 'Faltan datos obligatorios: idDeuda y fecha'
+          }));
+        case 4:
+          _context7.prev = 4;
+          _context7.next = 7;
+          return Deuda.sequelize.connectionManager.getConnection();
+        case 7:
+          connection = _context7.sent;
+          _context7.next = 10;
+          return connection.query('CALL pagar_deuda(?, ?)', {
+            replacements: [idDeuda, fecha]
+          });
+        case 10:
+          // Liberar la conexión
+          connection.release();
+          res.status(200).json({
+            message: 'Deuda pagada exitosamente'
+          });
+          _context7.next = 18;
+          break;
+        case 14:
+          _context7.prev = 14;
+          _context7.t0 = _context7["catch"](4);
+          console.error('Error al pagar la deuda:', _context7.t0);
+          res.status(500).json({
+            error: 'Error al pagar la deuda'
+          });
+        case 18:
+        case "end":
+          return _context7.stop();
+      }
+    }, _callee7, null, [[4, 14]]);
+  }));
+  return function pagarDeuda(_x13, _x14) {
+    return _ref7.apply(this, arguments);
+  };
+}();
 module.exports = {
   getPagos: getPagos,
   getPagoById: getPagoById,
   createPago: createPago,
   updatePago: updatePago,
   deletePago: deletePago,
-  getPagosWithDetails: getPagosWithDetails // Exporting the new function
+  getPagosWithDetails: getPagosWithDetails,
+  // Exporting the new function
+  pagarDeuda: pagarDeuda
 };

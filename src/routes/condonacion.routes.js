@@ -153,4 +153,36 @@ router.put('/:idCondonacion', condonacionCtrl.updateCondonacion);
 
 router.delete('/:idCondonacion', condonacionCtrl.deleteCondonacion); 
 
+/**
+ * @swagger
+ * /api/condonaciones/condonar-deuda:
+ *   post:
+ *     summary: Condonar una deuda y registrar la condonación
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idDeuda:
+ *                 type: integer
+ *                 example: 123
+ *                 description: ID de la deuda a condonar
+ *               fecha:
+ *                 type: string
+ *                 format: date
+ *                 example: 2024-12-21
+ *                 description: Fecha en que se realiza la condonación
+ *     responses:
+ *       200:
+ *         description: Deuda condonada exitosamente
+ *       400:
+ *         description: Faltan datos obligatorios
+ *       500:
+ *         description: Error al condonar la deuda
+ */
+router.post('/condonar-deuda', condonacionCtrl.condonarDeuda);
+
+
 module.exports = router;

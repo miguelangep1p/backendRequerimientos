@@ -178,4 +178,35 @@ router.put('/:idPago', pagoCtrl.updatePago);
  *         description: Pago no encontrado
  */
 router["delete"]('/:idPago', pagoCtrl.deletePago);
+
+/**
+ * @swagger
+ * /api/pagos/pagar-deuda:
+ *   post:
+ *     summary: Pagar una deuda y registrar el pago
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idDeuda:
+ *                 type: integer
+ *                 example: 123
+ *                 description: ID de la deuda a pagar
+ *               fecha:
+ *                 type: string
+ *                 format: date
+ *                 example: 2024-12-21
+ *                 description: Fecha en que se realiza el pago
+ *     responses:
+ *       200:
+ *         description: Deuda pagada exitosamente
+ *       400:
+ *         description: Faltan datos obligatorios
+ *       500:
+ *         description: Error al pagar la deuda
+ */
+router.post('/pagar-deuda', pagoCtrl.pagarDeuda);
 module.exports = router;
