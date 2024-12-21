@@ -104,3 +104,20 @@ exports.login = async (req, res) => {
     role,
   });
 };
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] } // Excluir la contraseña por seguridad
+    });
+    if (users.length > 0) {
+      success(res, users);
+    } else {
+      badRequest(res, "No se encontraron usuarios.");
+    }
+  } catch (err) {
+    res.status(500).send({
+      message: "Error al obtener los usuarios: " + err.message
+    });
+  }
+};

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { register, login } = require("../controllers/auth.controller");
+const { register, login, getAllUsers } = require("../controllers/auth.controller");
 
 /**
  * @swagger
@@ -75,6 +75,54 @@ router.post("/register", register);
  *       400:
  *         description: Error en la solicitud
  */
+
+/**
+ * @swagger
+ * /api/auth/users:
+ *   get:
+ *     tags: [Auth]
+ *     summary: Obtener una lista de todos los usuarios
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Error en la solicitud
+ *       401:
+ *         description: No autorizado, si se implementa control de acceso
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         email:
+ *           type: string
+ *           example: "john.doe@example.com"
+ *         businessName:
+ *           type: string
+ *           example: "ESCUADRON SECURITY S.A.C."
+ *         name:
+ *           type: string
+ *           example: "John Doe"
+ *         jobTitle:
+ *           type: string
+ *           example: "Gerente General"
+ *         phone:
+ *           type: string
+ *           example: "962028767"
+ *         username:
+ *           type: string
+ *           example: "DUCZ69"
+ */
 router.post("/login", login);
+router.get("/users", getAllUsers);
 
 module.exports = { AuthRoutes: router };
