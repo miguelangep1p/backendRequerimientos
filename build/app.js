@@ -105,18 +105,23 @@ var UserRoutes = require('./routes/user.routes');
 app.use("/api/auth", AuthRoutes);
 app.use('/api/roles', RoleRoutes);
 app.use('/api/alumnos', AlumnosRoutes);
-app.use('/api/asignar-concepto', AsignarConceptoRoutes);
-app.use('/api/asignar-escala', AsignarEscalaRoutes);
+app.use('/api/asignar_concepto', AsignarConceptoRoutes);
+app.use('/api/asignar_escala', AsignarEscalaRoutes);
 app.use('/api/concepto', ConceptoRoutes);
-app.use('/api/condonacion', CondonacionRoutes);
-app.use('/api/detalle-pago', DetallePagoRoutes);
+app.use('/api/condonaciones', CondonacionRoutes);
+app.use('/api/detalle_pago', DetallePagoRoutes);
 app.use('/api/deuda', DeudaRoutes);
 app.use('/api/escala', EscalaRoutes);
-app.use('/api/historial-cambios', HistorialCambiosRoutes);
-app.use('/', IndexRoutes); // Si este es el índice general
+app.use('/api/historial_cambios', HistorialCambiosRoutes);
+app.use('/', IndexRoutes);
 app.use('/api/notificaciones', NotificacionesRoutes);
 app.use('/api/padres', PadresRoutes);
 app.use('/api/pago', PagoRoutes);
 app.use('/api/recibo', ReciboRoutes);
 app.use('/api/users', UserRoutes);
+app._router.stack.forEach(function (r) {
+  if (r.route && r.route.path) {
+    console.log(r.route.path);
+  }
+});
 module.exports = app;

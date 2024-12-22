@@ -31,19 +31,27 @@ const getAsignarConceptoById = async (req, res) => {
 // Crear un nuevo registro
 const createAsignarConcepto = async (req, res) => {
     try {
-        const { concepto, idEscala, idConcepto } = req.body;
+        const { idEscala, idConcepto } = req.body;
 
-        if (!concepto || !idEscala || !idConcepto) {
+        // Validar que los datos obligatorios estén presentes
+        if (!idEscala || !idConcepto) {
             return res.status(400).json({ error: 'Todos los campos obligatorios deben ser proporcionados' });
         }
 
+        // Validar duplicados
+        const existente = await AsignarConcepto.findOne({
+            where: { idEscala, idConcepto }
+        });
+        if (existente) {
+            return res.status(409).json({ error: 'Esta asignación ya existe' });
+        }
+
         const nuevoAsignarConcepto = await AsignarConcepto.create({
-            concepto,
             idEscala,
             idConcepto
         });
 
-        res.status(201).json(nuevoAsignarConcepto);
+        res.status(201).json({ message: 'Asignación creada exitosamente', data: nuevoAsignarConcepto });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al crear el registro' });
@@ -54,7 +62,7 @@ const createAsignarConcepto = async (req, res) => {
 const updateAsignarConcepto = async (req, res) => {
     try {
         const { idAsignar_Concepto } = req.params;
-        const { concepto, idEscala, idConcepto } = req.body;
+        const { idEscala, idConcepto } = req.body;
 
         const asignarConcepto = await AsignarConcepto.findByPk(idAsignar_Concepto);
 
@@ -63,12 +71,11 @@ const updateAsignarConcepto = async (req, res) => {
         }
 
         await asignarConcepto.update({
-            concepto,
             idEscala,
             idConcepto
         });
 
-        res.status(200).json(asignarConcepto);
+        res.status(200).json({ message: 'Asignación actualizada exitosamente', data: asignarConcepto });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al actualizar el registro' });

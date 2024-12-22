@@ -13,10 +13,6 @@ var Asignar_Concepto = sequelize.define('Asignar_Concepto', {
     autoIncrement: true,
     primaryKey: true
   },
-  concepto: {
-    type: DataTypes.TEXT,
-    allowNull: false
-  },
   idEscala: {
     type: DataTypes.BIGINT,
     references: {

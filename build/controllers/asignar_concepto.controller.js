@@ -84,13 +84,13 @@ var getAsignarConceptoById = /*#__PURE__*/function () {
 // Crear un nuevo registro
 var createAsignarConcepto = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req, res) {
-    var _req$body, concepto, idEscala, idConcepto, nuevoAsignarConcepto;
+    var _req$body, idEscala, idConcepto, existente, nuevoAsignarConcepto;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           _context3.prev = 0;
-          _req$body = req.body, concepto = _req$body.concepto, idEscala = _req$body.idEscala, idConcepto = _req$body.idConcepto;
-          if (!(!concepto || !idEscala || !idConcepto)) {
+          _req$body = req.body, idEscala = _req$body.idEscala, idConcepto = _req$body.idConcepto; // Validar que los datos obligatorios estén presentes
+          if (!(!idEscala || !idConcepto)) {
             _context3.next = 4;
             break;
           }
@@ -99,28 +99,47 @@ var createAsignarConcepto = /*#__PURE__*/function () {
           }));
         case 4:
           _context3.next = 6;
+          return AsignarConcepto.findOne({
+            where: {
+              idEscala: idEscala,
+              idConcepto: idConcepto
+            }
+          });
+        case 6:
+          existente = _context3.sent;
+          if (!existente) {
+            _context3.next = 9;
+            break;
+          }
+          return _context3.abrupt("return", res.status(409).json({
+            error: 'Esta asignación ya existe'
+          }));
+        case 9:
+          _context3.next = 11;
           return AsignarConcepto.create({
-            concepto: concepto,
             idEscala: idEscala,
             idConcepto: idConcepto
           });
-        case 6:
+        case 11:
           nuevoAsignarConcepto = _context3.sent;
-          res.status(201).json(nuevoAsignarConcepto);
-          _context3.next = 14;
+          res.status(201).json({
+            message: 'Asignación creada exitosamente',
+            data: nuevoAsignarConcepto
+          });
+          _context3.next = 19;
           break;
-        case 10:
-          _context3.prev = 10;
+        case 15:
+          _context3.prev = 15;
           _context3.t0 = _context3["catch"](0);
           console.error(_context3.t0);
           res.status(500).json({
             error: 'Error al crear el registro'
           });
-        case 14:
+        case 19:
         case "end":
           return _context3.stop();
       }
-    }, _callee3, null, [[0, 10]]);
+    }, _callee3, null, [[0, 15]]);
   }));
   return function createAsignarConcepto(_x5, _x6) {
     return _ref3.apply(this, arguments);
@@ -130,13 +149,13 @@ var createAsignarConcepto = /*#__PURE__*/function () {
 // Actualizar un registro existente
 var updateAsignarConcepto = /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
-    var idAsignar_Concepto, _req$body2, concepto, idEscala, idConcepto, asignarConcepto;
+    var idAsignar_Concepto, _req$body2, idEscala, idConcepto, asignarConcepto;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
       while (1) switch (_context4.prev = _context4.next) {
         case 0:
           _context4.prev = 0;
           idAsignar_Concepto = req.params.idAsignar_Concepto;
-          _req$body2 = req.body, concepto = _req$body2.concepto, idEscala = _req$body2.idEscala, idConcepto = _req$body2.idConcepto;
+          _req$body2 = req.body, idEscala = _req$body2.idEscala, idConcepto = _req$body2.idConcepto;
           _context4.next = 5;
           return AsignarConcepto.findByPk(idAsignar_Concepto);
         case 5:
@@ -151,12 +170,14 @@ var updateAsignarConcepto = /*#__PURE__*/function () {
         case 8:
           _context4.next = 10;
           return asignarConcepto.update({
-            concepto: concepto,
             idEscala: idEscala,
             idConcepto: idConcepto
           });
         case 10:
-          res.status(200).json(asignarConcepto);
+          res.status(200).json({
+            message: 'Asignación actualizada exitosamente',
+            data: asignarConcepto
+          });
           _context4.next = 17;
           break;
         case 13:

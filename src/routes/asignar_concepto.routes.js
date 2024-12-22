@@ -13,12 +13,16 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *         idAsignar_Concepto:
  *           type: integer
  *           example: 1
+ *           description: ID único de la asignación (generado automáticamente).
+ *           readOnly: true
  *         idEscala:
  *           type: integer
  *           example: 2
+ *           description: ID de la escala asignada.
  *         idConcepto:
  *           type: integer
  *           example: 3
+ *           description: ID del concepto asignado.
  */
 
 
@@ -37,6 +41,7 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *               items:
  *                 $ref: '#/components/schemas/AsignarConcepto'
  */
+
     router.get('/', asignarconceptoCtrl.getAsignarConceptos); 
 
 /**
@@ -78,9 +83,11 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *               idEscala:
  *                 type: integer
  *                 example: 2
+ *                 description: ID de la escala asignada.
  *               idConcepto:
  *                 type: integer
  *                 example: 3
+ *                 description: ID del concepto asignado.
  *     responses:
  *       201:
  *         description: Asignación de concepto creada exitosamente
@@ -88,7 +95,12 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/AsignarConcepto'
+ *       400:
+ *         description: Campos obligatorios faltantes.
+ *       409:
+ *         description: La asignación ya existe.
  */
+
     router.post('/', asignarconceptoCtrl.createAsignarConcepto); 
 
 /**
@@ -97,28 +109,38 @@ import *as asignarconceptoCtrl from '../controllers/asignar_concepto.controller'
  *   put:
  *     summary: Actualiza una asignación de concepto por su ID
  *     parameters:
- *       - in: path
- *         name: id
+ *       - name: id
+ *         in: path
  *         required: true
+ *         description: ID de la asignación de concepto a actualizar.
  *         schema:
  *           type: integer
- *         description: ID de la asignación de concepto a actualizar
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/AsignarConcepto'
+ *             type: object
+ *             properties:
+ *               idEscala:
+ *                 type: integer
+ *                 example: 2
+ *                 description: ID de la escala asignada.
+ *               idConcepto:
+ *                 type: integer
+ *                 example: 3
+ *                 description: ID del concepto asignado.
  *     responses:
  *       200:
- *         description: Asignación de concepto actualizada exitosamente
+ *         description: Asignación de concepto actualizada exitosamente.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/AsignarConcepto'
  *       404:
- *         description: Asignación de concepto no encontrada
+ *         description: Asignación de concepto no encontrada.
  */
+
 router.put('/:idAsignar_Concepto', asignarconceptoCtrl.updateAsignarConcepto);
 
 
@@ -131,15 +153,16 @@ router.put('/:idAsignar_Concepto', asignarconceptoCtrl.updateAsignarConcepto);
  *       - name: id
  *         in: path
  *         required: true
- *         description: ID de la asignación de concepto a eliminar
+ *         description: ID de la asignación de concepto a eliminar.
  *         schema:
  *           type: integer
  *     responses:
  *       200:
- *         description: Asignación de concepto eliminada exitosamente
+ *         description: Asignación de concepto eliminada exitosamente.
  *       404:
- *         description: Asignación de concepto no encontrada
+ *         description: Asignación de concepto no encontrada.
  */
+
 router.delete('/:idAsignar_Concepto', asignarconceptoCtrl.deleteAsignarConcepto); 
 
 module.exports = router;

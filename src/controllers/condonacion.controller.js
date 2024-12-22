@@ -108,29 +108,32 @@ const getAllCondonacionesWithDeuda = async (req, res) => {
 const condonarDeuda = async (req, res) => {
     const { idDeuda, fecha } = req.body;
 
-    // Validar que los datos obligatorios están presentes
     if (!idDeuda || !fecha) {
         return res.status(400).json({ error: 'Faltan datos obligatorios: idDeuda y fecha' });
     }
 
     try {
-        // Obtener la conexión de la base de datos
-        const connection = await Deuda.sequelize.connectionManager.getConnection();
-
-        // Llamar al procedimiento almacenado
-        await connection.query('CALL condonar_deuda_completa(?, ?)', {
-            replacements: [idDeuda, fecha]
+        // Configuración de conexión con mysql2/promise
+        const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'tesoreriadb',
         });
 
-        // Liberar la conexión
-        connection.release();
+        // Llamar al procedimiento almacenado usando `await`
+        await connection.query('CALL condonar_deuda(?, ?)', [idDeuda, fecha]);
+
+        // Cerrar la conexión
+        await connection.end();
 
         res.status(200).json({ message: 'Deuda condonada exitosamente' });
     } catch (error) {
         console.error('Error al condonar la deuda:', error);
-        res.status(500).json({ error: 'Error al condonar la deuda' });
+        res.status(500).json({ error: 'Error al condonar la deuda', details: error.message });
     }
 };
+
 
 
 module.exports = {

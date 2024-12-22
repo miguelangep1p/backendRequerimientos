@@ -2,7 +2,7 @@ const Pago = require('../models/Pago');
 const Padre = require('../models/Padre'); // Ensure this model is properly imported
 const Alumno = require('../models/Alumno'); // Ensure this model is properly imported
 const Deuda = require('../models/Deuda'); // Ensure this model is properly imported
-
+import sequelize from '../config/database.js';
 // Obtener todos los pagos
 const getPagos = async (req, res) => {
     try {
@@ -120,30 +120,22 @@ const getPagosWithDetails = async (req, res) => {
 };
 
 const pagarDeuda = async (req, res) => {
-    const idDeuda = req.body.idDeuda;
-    const fecha = req.body.fecha;
+    const { idDeuda, fecha } = req.body;
 
-    // Validar que los datos obligatorios están presentes
     if (!idDeuda || !fecha) {
         return res.status(400).json({ error: 'Faltan datos obligatorios: idDeuda y fecha' });
     }
 
     try {
-        // Obtener la conexión de la base de datos desde Sequelize
-        const connection = await Deuda.sequelize.connectionManager.getConnection();
-
         // Llamar al procedimiento almacenado
-        await connection.query('CALL pagar_deuda(?, ?)', {
-            replacements: [idDeuda, fecha]
+        await sequelize.query('CALL pagar_deuda(:idDeuda, :fecha)', {
+            replacements: { idDeuda, fecha },
         });
 
-        // Liberar la conexión
-        connection.release();
-
-        res.status(200).json({ message: 'Deuda pagada exitosamente' });
+        res.status(200).json({ message: 'Pago registrado exitosamente' });
     } catch (error) {
-        console.error('Error al pagar la deuda:', error);
-        res.status(500).json({ error: 'Error al pagar la deuda' });
+        console.error('Error al registrar el pago:', error);
+        res.status(500).json({ error: 'Error al registrar el pago', details: error.message });
     }
 };
 

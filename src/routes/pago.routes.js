@@ -179,7 +179,7 @@ router.delete('/:idPago', pagoCtrl.deletePago);
 
 /**
  * @swagger
- * /api/pagos/pagar-deuda:
+ * /api/pago/pagar-deuda:
  *   post:
  *     summary: Pagar una deuda y registrar el pago
  *     requestBody:

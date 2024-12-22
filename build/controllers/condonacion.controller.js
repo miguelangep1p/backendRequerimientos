@@ -256,7 +256,7 @@ var condonarDeuda = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee7$(_context7) {
       while (1) switch (_context7.prev = _context7.next) {
         case 0:
-          _req$body3 = req.body, idDeuda = _req$body3.idDeuda, fecha = _req$body3.fecha; // Validar que los datos obligatorios están presentes
+          _req$body3 = req.body, idDeuda = _req$body3.idDeuda, fecha = _req$body3.fecha;
           if (!(!idDeuda || !fecha)) {
             _context7.next = 3;
             break;
@@ -267,33 +267,38 @@ var condonarDeuda = /*#__PURE__*/function () {
         case 3:
           _context7.prev = 3;
           _context7.next = 6;
-          return Deuda.sequelize.connectionManager.getConnection();
+          return mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'tesoreriadb'
+          });
         case 6:
           connection = _context7.sent;
           _context7.next = 9;
-          return connection.query('CALL condonar_deuda_completa(?, ?)', {
-            replacements: [idDeuda, fecha]
-          });
+          return connection.query('CALL condonar_deuda(?, ?)', [idDeuda, fecha]);
         case 9:
-          // Liberar la conexión
-          connection.release();
+          _context7.next = 11;
+          return connection.end();
+        case 11:
           res.status(200).json({
             message: 'Deuda condonada exitosamente'
           });
-          _context7.next = 17;
+          _context7.next = 18;
           break;
-        case 13:
-          _context7.prev = 13;
+        case 14:
+          _context7.prev = 14;
           _context7.t0 = _context7["catch"](3);
           console.error('Error al condonar la deuda:', _context7.t0);
           res.status(500).json({
-            error: 'Error al condonar la deuda'
+            error: 'Error al condonar la deuda',
+            details: _context7.t0.message
           });
-        case 17:
+        case 18:
         case "end":
           return _context7.stop();
       }
-    }, _callee7, null, [[3, 13]]);
+    }, _callee7, null, [[3, 14]]);
   }));
   return function condonarDeuda(_x13, _x14) {
     return _ref7.apply(this, arguments);
