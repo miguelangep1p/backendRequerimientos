@@ -121,3 +121,74 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
+
+// Método para actualizar un usuario
+const updateUserSchema = Joi.object({
+  email: Joi.string().email().messages({
+    "string.email": "El correo electrónico no tiene un formato válido."
+  }),
+  username: Joi.string().messages({
+    "string.base": "El nombre de usuario debe ser un texto."
+  }),
+  password: Joi.string().min(6).max(1024).messages({
+    "string.min": "La contraseña debe tener al menos {#limit} caracteres."
+  })
+});
+
+export const updateUser = async (req, res) => {
+  const { id } = req.params; // ID del usuario a actualizar
+
+  // Validar los datos antes de actualizar
+  const { error } = updateUserSchema.validate(req.body);
+  if (error) return badRequest(res, error.details[0].message);
+
+  const { email, username, password } = req.body;
+
+  try {
+    // Buscar el usuario por ID
+    const user = await User.findByPk(id);
+    if (!user) return badRequest(res, "Usuario no encontrado");
+
+    // Verificar si el correo ya está en uso por otro usuario
+    if (email && email !== user.email) {
+      const emailExist = await User.findOne({ where: { email } });
+      if (emailExist) return badRequest(res, "El correo ya está registrado");
+    }
+
+    // Verificar si el nombre de usuario ya está en uso por otro usuario
+    if (username && username !== user.username) {
+      const usernameExist = await User.findOne({ where: { username } });
+      if (usernameExist) return badRequest(res, "El nombre de usuario ya está registrado");
+    }
+
+    // Actualizar los datos del usuario
+    if (email) user.email = email;
+    if (username) user.username = username;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    const updatedUser = await user.save();
+    success(res, updatedUser);
+  } catch (err) {
+    res.status(500).send({ message: "Error al actualizar el usuario: " + err.message });
+  }
+};
+
+// Método para eliminar un usuario
+export const deleteUser = async (req, res) => {
+  const { id } = req.params; // ID del usuario a eliminar
+
+  try {
+    // Buscar el usuario por ID
+    const user = await User.findByPk(id);
+    if (!user) return badRequest(res, "Usuario no encontrado");
+
+    // Eliminar el usuario
+    await user.destroy();
+    success(res, { message: "Usuario eliminado correctamente" });
+  } catch (err) {
+    res.status(500).send({ message: "Error al eliminar el usuario: " + err.message });
+  }
+};

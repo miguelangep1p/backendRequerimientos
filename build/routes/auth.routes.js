@@ -32,9 +32,21 @@ const {
  *               email:
  *                 type: string
  *                 example: "john.doe@example.com"
+ *               businessName:
+ *                 type: string
+ *                 example: "ESCUADRON SECURITY S.A.C."
+ *               name:
+ *                 type: string
+ *                 example: "John Doe"
+ *               jobTitle:
+ *                 type: string
+ *                 example: "Gerente General"
+ *               phone:
+ *                 type: string
+ *                 example: "962028767"
  *               username:
  *                 type: string
- *                 example: "johndoe"
+ *                 example: "DUCZ69"
  *               password:
  *                 type: string
  *                 example: "password123"
@@ -90,6 +102,34 @@ router.post("/login", login);
  *                 $ref: '#/components/schemas/User'
  *       400:
  *         description: Error en la solicitud
+ *       401:
+ *         description: No autorizado, si se implementa control de acceso
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         email:
+ *           type: string
+ *           example: "john.doe@example.com"
+ *         businessName:
+ *           type: string
+ *           example: "ESCUADRON SECURITY S.A.C."
+ *         name:
+ *           type: string
+ *           example: "John Doe"
+ *         jobTitle:
+ *           type: string
+ *           example: "Gerente General"
+ *         phone:
+ *           type: string
+ *           example: "962028767"
+ *         username:
+ *           type: string
+ *           example: "DUCZ69"
  */
 router.get("/users", getAllUsers);
 
@@ -98,13 +138,13 @@ router.get("/users", getAllUsers);
  * /api/auth/users/{id}:
  *   put:
  *     tags: [Auth]
- *     summary: Actualizar un usuario
+ *     summary: Actualizar un usuario existente
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: integer
+ *         required: true
  *         description: ID del usuario a actualizar
  *     requestBody:
  *       required: true
@@ -115,23 +155,18 @@ router.get("/users", getAllUsers);
  *             properties:
  *               email:
  *                 type: string
- *                 example: "updated.email@example.com"
+ *                 example: "john.updated@example.com"
  *               username:
  *                 type: string
- *                 example: "updatedUsername"
+ *                 example: "UpdatedUsername"
  *               password:
  *                 type: string
  *                 example: "newpassword123"
- *               roleId:
- *                 type: integer
- *                 example: 2
  *     responses:
  *       200:
  *         description: Usuario actualizado exitosamente
  *       400:
  *         description: Error en la solicitud
- *       404:
- *         description: Usuario no encontrado
  */
 router.put("/users/:id", updateUser);
 
@@ -140,24 +175,21 @@ router.put("/users/:id", updateUser);
  * /api/auth/users/{id}:
  *   delete:
  *     tags: [Auth]
- *     summary: Eliminar un usuario
+ *     summary: Eliminar un usuario existente
  *     parameters:
  *       - in: path
  *         name: id
- *         required: true
  *         schema:
  *           type: integer
+ *         required: true
  *         description: ID del usuario a eliminar
  *     responses:
  *       200:
  *         description: Usuario eliminado exitosamente
  *       400:
  *         description: Error en la solicitud
- *       404:
- *         description: Usuario no encontrado
  */
 router.delete("/users/:id", deleteUser);
-
 module.exports = {
   AuthRoutes: router
 };

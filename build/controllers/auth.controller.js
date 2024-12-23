@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.register = exports.getAllUsers = exports.updateUser = exports.deleteUser = void 0;
+exports.updateUser = exports.register = exports.getAllUsers = exports.deleteUser = void 0;
 var _responseTypes = require("../utils/response-types");
 var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
@@ -12,6 +12,7 @@ var _userModel = require("../models/user.model.js");
 var _roleModel = require("../models/role.model.js");
 var _sequelize = require("sequelize");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
+// Ajusta la ruta según tu estructura de directorios
 
 // Validación para el registro
 const registerSchema = _joi.default.object({
@@ -27,7 +28,6 @@ const registerSchema = _joi.default.object({
     "any.required": "La contraseña es obligatoria."
   })
 });
-
 const register = async (req, res) => {
   // Validar los datos antes de crear un usuario
   const {
@@ -63,9 +63,8 @@ const register = async (req, res) => {
     email,
     username,
     password: hashedPassword,
-    roleId
+    roleId: 1
   });
-
   try {
     const savedUser = await user.save();
     (0, _responseTypes.success)(res, {
@@ -76,8 +75,6 @@ const register = async (req, res) => {
   }
 };
 exports.register = register;
-
-
 const loginSchema = _joi.default.object({
   email: _joi.default.string().min(3).max(255).required().messages({
     "string.min": "El correo debe tener al menos {#limit} caracteres.",
@@ -88,7 +85,6 @@ const loginSchema = _joi.default.object({
     "any.required": "La contraseña es obligatoria."
   })
 });
-
 exports.login = async (req, res) => {
   const {
     error
@@ -136,8 +132,6 @@ exports.login = async (req, res) => {
     role
   });
 };
-
-
 const getAllUsers = async (req, res) => {
   try {
     const users = await _userModel.User.findAll({
@@ -157,26 +151,66 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+// Método para actualizar un usuario
 exports.getAllUsers = getAllUsers;
-
-// Actualizar un usuario
+const updateUserSchema = _joi.default.object({
+  email: _joi.default.string().email().messages({
+    "string.email": "El correo electrónico no tiene un formato válido."
+  }),
+  username: _joi.default.string().messages({
+    "string.base": "El nombre de usuario debe ser un texto."
+  }),
+  password: _joi.default.string().min(6).max(1024).messages({
+    "string.min": "La contraseña debe tener al menos {#limit} caracteres."
+  })
+});
 const updateUser = async (req, res) => {
-  const { id } = req.params;
-  const { email, username, password, roleId } = req.body;
+  const {
+    id
+  } = req.params; // ID del usuario a actualizar
 
+  // Validar los datos antes de actualizar
+  const {
+    error
+  } = updateUserSchema.validate(req.body);
+  if (error) return (0, _responseTypes.badRequest)(res, error.details[0].message);
+  const {
+    email,
+    username,
+    password
+  } = req.body;
   try {
+    // Buscar el usuario por ID
     const user = await _userModel.User.findByPk(id);
-    if (!user) return (0, _responseTypes.badRequest)(res, "Usuario no encontrado.");
+    if (!user) return (0, _responseTypes.badRequest)(res, "Usuario no encontrado");
 
-    // Actualizar campos si están presentes
+    // Verificar si el correo ya está en uso por otro usuario
+    if (email && email !== user.email) {
+      const emailExist = await _userModel.User.findOne({
+        where: {
+          email
+        }
+      });
+      if (emailExist) return (0, _responseTypes.badRequest)(res, "El correo ya está registrado");
+    }
+
+    // Verificar si el nombre de usuario ya está en uso por otro usuario
+    if (username && username !== user.username) {
+      const usernameExist = await _userModel.User.findOne({
+        where: {
+          username
+        }
+      });
+      if (usernameExist) return (0, _responseTypes.badRequest)(res, "El nombre de usuario ya está registrado");
+    }
+
+    // Actualizar los datos del usuario
     if (email) user.email = email;
     if (username) user.username = username;
     if (password) {
       const salt = await _bcryptjs.default.genSalt(10);
       user.password = await _bcryptjs.default.hash(password, salt);
     }
-    if (roleId) user.roleId = roleId;
-
     const updatedUser = await user.save();
     (0, _responseTypes.success)(res, updatedUser);
   } catch (err) {
@@ -185,18 +219,24 @@ const updateUser = async (req, res) => {
     });
   }
 };
-exports.updateUser = updateUser;
 
-// Eliminar un usuario
+// Método para eliminar un usuario
+exports.updateUser = updateUser;
 const deleteUser = async (req, res) => {
-  const { id } = req.params;
+  const {
+    id
+  } = req.params; // ID del usuario a eliminar
 
   try {
+    // Buscar el usuario por ID
     const user = await _userModel.User.findByPk(id);
-    if (!user) return (0, _responseTypes.badRequest)(res, "Usuario no encontrado.");
+    if (!user) return (0, _responseTypes.badRequest)(res, "Usuario no encontrado");
 
+    // Eliminar el usuario
     await user.destroy();
-    (0, _responseTypes.success)(res, { message: "Usuario eliminado exitosamente." });
+    (0, _responseTypes.success)(res, {
+      message: "Usuario eliminado correctamente"
+    });
   } catch (err) {
     res.status(500).send({
       message: "Error al eliminar el usuario: " + err.message
