@@ -4,6 +4,9 @@ const Notificaciones = require('../models/Notificaciones');
 const Alumno = require('../models/Alumno'); // Asegúrate de que este modelo está importado
 const Padre = require('../models/Padre'); // Asegúrate de que este modelo está importado
 const Deuda = require('../models/Deuda');
+const {
+  getPadreByAlumno
+} = require('./padres.controller');
 
 // Obtener todas las notificaciones
 const getNotificaciones = async (req, res) => {
@@ -44,7 +47,6 @@ const createNotificacion = async (req, res) => {
   try {
     const {
       idAlumno,
-      idPadre,
       idDeuda,
       tipo,
       descripcion,
@@ -53,11 +55,26 @@ const createNotificacion = async (req, res) => {
     } = req.body;
 
     // Validar que los datos obligatorios están presentes
-    if (!descripcion || !fechaNotificacion) {
+    if (!idAlumno || !descripcion || !fechaNotificacion) {
       return res.status(400).json({
-        error: 'Los campos obligatorios deben ser proporcionados'
+        error: 'Los campos idAlumno, descripcion y fechaNotificacion son obligatorios.'
       });
     }
+
+    // Buscar el padre asociado al idAlumno
+    const padre = await Padre.findOne({
+      where: {
+        idAlumno
+      }
+    });
+    if (!padre) {
+      return res.status(404).json({
+        error: `No se encontró un padre asociado al alumno con idAlumno: ${idAlumno}. Por favor, verifica que el idAlumno sea correcto.`
+      });
+    }
+    const idPadre = padre.id;
+
+    // Crear la nueva notificación con el idPadre encontrado
     const nuevaNotificacion = await Notificaciones.create({
       idAlumno,
       idPadre,
@@ -69,9 +86,9 @@ const createNotificacion = async (req, res) => {
     });
     res.status(201).json(nuevaNotificacion);
   } catch (error) {
-    console.error(error);
+    console.error('Error al crear la notificación:', error);
     res.status(500).json({
-      error: 'Error al crear la notificación'
+      error: 'Error interno al crear la notificación.'
     });
   }
 };
@@ -84,7 +101,6 @@ const updateNotificacion = async (req, res) => {
     } = req.params;
     const {
       idAlumno,
-      idPadre,
       idDeuda,
       tipo,
       descripcion,
@@ -96,6 +112,22 @@ const updateNotificacion = async (req, res) => {
       return res.status(404).json({
         error: 'Notificación no encontrada'
       });
+    }
+
+    // Buscar idPadre asociado al idAlumno si se actualiza el idAlumno
+    let idPadre = notificacion.idPadre;
+    if (idAlumno && idAlumno !== notificacion.idAlumno) {
+      const padre = await Padre.findOne({
+        where: {
+          idAlumno
+        }
+      });
+      if (!padre) {
+        return res.status(404).json({
+          error: 'No se encontró un padre asociado al alumno proporcionado'
+        });
+      }
+      idPadre = padre.id;
     }
     await notificacion.update({
       idAlumno,
@@ -114,7 +146,6 @@ const updateNotificacion = async (req, res) => {
     });
   }
 };
-
 // Eliminar una notificación
 const deleteNotificacion = async (req, res) => {
   try {
@@ -162,11 +193,78 @@ const getNotificacionesWithDetails = async (req, res) => {
     });
   }
 };
+const getDeudasByAlumno = async (req, res) => {
+  try {
+    const {
+      idAlumno
+    } = req.params;
+
+    // Validar que el idAlumno esté presente
+    if (!idAlumno) {
+      return res.status(400).json({
+        error: 'El idAlumno es obligatorio.'
+      });
+    }
+
+    // Buscar las deudas asociadas al alumno
+    const deudas = await Deuda.findAll({
+      where: {
+        idAlumno
+      }
+    });
+    if (!deudas || deudas.length === 0) {
+      return res.status(404).json({
+        error: `No se encontraron deudas para el alumno con idAlumno: ${idAlumno}.`
+      });
+    }
+    res.status(200).json(deudas);
+  } catch (error) {
+    console.error('Error al obtener las deudas del alumno:', error);
+    res.status(500).json({
+      error: 'Error interno al obtener las deudas.'
+    });
+  }
+};
+const getNotificacionesByPadre = async (req, res) => {
+  try {
+    const {
+      idPadre
+    } = req.params;
+
+    // Validar que el idPadre esté presente
+    if (!idPadre) {
+      return res.status(400).json({
+        error: 'El idPadre es obligatorio.'
+      });
+    }
+
+    // Buscar las notificaciones asociadas al idPadre
+    const notificaciones = await Notificaciones.findAll({
+      where: {
+        idPadre
+      },
+      attributes: ['idNotificacion', 'descripcion', 'fechaNotificacion', 'estado'] // Solo los campos relevantes
+    });
+    if (!notificaciones || notificaciones.length === 0) {
+      return res.status(404).json({
+        error: `No se encontraron notificaciones para el padre con idPadre: ${idPadre}.`
+      });
+    }
+    res.status(200).json(notificaciones);
+  } catch (error) {
+    console.error('Error al obtener notificaciones para el padre:', error);
+    res.status(500).json({
+      error: 'Error interno al obtener notificaciones.'
+    });
+  }
+};
 module.exports = {
   getNotificaciones,
   getNotificacionById,
   createNotificacion,
   updateNotificacion,
   deleteNotificacion,
-  getNotificacionesWithDetails // Exportar la nueva función
+  getNotificacionesWithDetails,
+  getDeudasByAlumno,
+  getNotificacionesByPadre // Exportar la nueva función
 };

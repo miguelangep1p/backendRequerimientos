@@ -209,4 +209,30 @@ router.put('/:idPadre', padresCtrl.updatePadre);
  */
 router.delete('/:idPadre', padresCtrl.deletePadre); 
 
+/**
+ * @swagger
+ * /api/padres/alumno/{idAlumno}:
+ *   get:
+ *     summary: Obtiene el padre o tutor asociado a un alumno
+ *     description: Devuelve el padre relacionado con un alumno dado su `idAlumno`.
+ *     parameters:
+ *       - name: idAlumno
+ *         in: path
+ *         required: true
+ *         description: ID del alumno para buscar el padre asociado.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Información del padre asociado al alumno.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Padre'
+ *       404:
+ *         description: No se encontró un padre asociado al alumno proporcionado.
+ */
+router.get('/alumno/:idAlumno', padresCtrl.getPadreByAlumno);
+
+
 module.exports = router;

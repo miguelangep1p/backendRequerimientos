@@ -1,11 +1,6 @@
 import { Router } from "express";
-import {
-  createOrder,
-  captureOrder,
-  cancelPayment,
-} from "../controllers/payment.controller.js";
-
-const router = Router();
+const router = Router()
+import *as paymentCtrl from '../controllers/payment.controller.js'
 
 /**
  * @swagger
@@ -19,7 +14,7 @@ const router = Router();
  *       400:
  *         description: Error creating the order.
  */
-router.post("/create-order", createOrder);
+router.post("/create-order", paymentCtrl.createOrder);
 
 /**
  * @swagger
@@ -33,7 +28,7 @@ router.post("/create-order", createOrder);
  *       404:
  *         description: Order not found.
  */
-router.get("/capture-order", captureOrder);
+router.get("/capture-order", paymentCtrl.captureOrder);
 
 /**
  * @swagger
@@ -47,6 +42,6 @@ router.get("/capture-order", captureOrder);
  *       404:
  *         description: Payment not found.
  */
-router.get("/cancel-order", cancelPayment);
+router.get("/cancel-order", paymentCtrl.cancelPayment);
 
 module.exports = router;

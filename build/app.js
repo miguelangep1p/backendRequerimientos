@@ -166,7 +166,7 @@ app.use('/api/recibo', ReciboRoutes);
 app.use('/api/users', UserRoutes);
 app.use('/api/payments', PaymentsRoutes);
 app.get('/pasarela', (req, res) => {
-  res.sendFile(path.join(__dirname, 'pasarela.html')); // Cambia 'path/to/' por la ubicación real de tu archivo HTML
+  res.sendFile(path.join(__dirname, 'pasarela.html'));
 });
 app._router.stack.forEach(r => {
   if (r.route && r.route.path) {

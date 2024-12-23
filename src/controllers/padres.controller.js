@@ -124,11 +124,35 @@ const getPadresWithDetails = async (req, res) => {
     }
 };
 
+const getPadreByAlumno = async (req, res) => {
+    try {
+        const { idAlumno } = req.params;
+
+        console.log('ID Alumno recibido:', idAlumno); // Depuración
+
+        if (!idAlumno) {
+            return res.status(400).json({ error: 'El idAlumno es obligatorio.' });
+        }
+
+        const padre = await Padre.findOne({ where: { idAlumno } });
+
+        if (!padre) {
+            return res.status(404).json({ error: `No se encontró un padre asociado al alumno con idAlumno: ${idAlumno}.` });
+        }
+
+        res.status(200).json(padre);
+    } catch (error) {
+        console.error('Error al buscar el padre:', error);
+        res.status(500).json({ error: 'Error interno al buscar el padre.' });
+    }
+};
+
 module.exports = {
     getPadres,
     getPadreById,
     createPadre,
     updatePadre,
     deletePadre,
-    getPadresWithDetails // Exporting the new function
+    getPadresWithDetails ,
+    getPadreByAlumno
 };

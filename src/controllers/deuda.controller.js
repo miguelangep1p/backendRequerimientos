@@ -116,6 +116,7 @@ const getDeudasWithDetails = async (req, res) => {
     }
 };
 
+
 module.exports = {
     getDeudas,
     getDeudaById,
