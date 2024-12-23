@@ -2,7 +2,7 @@ const Pago = require('../models/Pago');
 const Padre = require('../models/Padre'); // Ensure this model is properly imported
 const Alumno = require('../models/Alumno'); // Ensure this model is properly imported
 const Deuda = require('../models/Deuda'); // Ensure this model is properly imported
-import sequelize from '../config/database.js';
+import sequelize from '../database.js';
 // Obtener todos los pagos
 const getPagos = async (req, res) => {
     try {

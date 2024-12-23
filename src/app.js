@@ -51,26 +51,25 @@ sequelize
   })
 
 // Configuración de Swagger
-const swaggerOptions = {
-  swaggerDefinition: {
-    openapi: "3.0.0",
-    info: {
-      title: "API de TKMT3",
-      version: "1.0.0",
-      description: "API de uso sospechoso",
-    },
-    servers: [{ url: "http://localhost:3000" }],
-  },
-  apis: ["./src/routes/*.js"],
-};
+// const swaggerOptions = {
+//   swaggerDefinition: {
+//     openapi: "3.0.0",
+//     info: {
+//       title: "API de TKMT3",
+//       version: "1.0.0",
+//       description: "API de uso sospechoso",
+//     },
+//     servers: [{ url: "http://localhost:3000" }],
+//   },
+//   apis: ["./src/routes/*.js"],
+// };
+// const swaggerDocs = swaggerJsDoc(swaggerOptions);
+// app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-// Redirigir la ruta principal a /api-docs
-app.get("/", (req, res) => {
-  res.redirect("/api-docs");
-});
+// // Redirigir la ruta principal a /api-docs
+// app.get("/", (req, res) => {
+//   res.redirect("/api-docs");
+// });
 
 // Rutas
 const { AuthRoutes } = require("./routes/auth.routes");
@@ -90,7 +89,7 @@ const PadresRoutes = require('./routes/padres.routes');
 const PagoRoutes = require('./routes/pago.routes');
 const ReciboRoutes = require('./routes/recibo.routes');
 const UserRoutes = require('./routes/user.routes');
-
+const PaymentsRoutes = require('./routes/payment.routes');
 
 app.use("/api/auth", AuthRoutes);
 app.use('/api/roles', RoleRoutes);
@@ -109,7 +108,7 @@ app.use('/api/padres', PadresRoutes);
 app.use('/api/pago', PagoRoutes);
 app.use('/api/recibo', ReciboRoutes);
 app.use('/api/users', UserRoutes);
-
+app.use('/api/payments', PaymentsRoutes);
 
 app._router.stack.forEach((r) => {
   if (r.route && r.route.path) {
