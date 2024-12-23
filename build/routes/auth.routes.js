@@ -1,10 +1,11 @@
 "use strict";
 
-var router = require("express").Router();
-var _require = require("../controllers/auth.controller"),
-  register = _require.register,
-  login = _require.login,
-  getAllUsers = _require.getAllUsers;
+const router = require("express").Router();
+const {
+  register,
+  login,
+  getAllUsers
+} = require("../controllers/auth.controller");
 
 /**
  * @swagger

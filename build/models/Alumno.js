@@ -3,13 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports["default"] = void 0;
+exports.default = void 0;
 var _sequelize = require("sequelize");
-var sequelize = new _sequelize.Sequelize('tesoreriadb', 'root', '', {
+const sequelize = new _sequelize.Sequelize('tesoreriadb', 'root', '', {
   host: 'localhost',
   dialect: 'mysql'
 });
-var Alumno = sequelize.define('Alumno', {
+const Alumno = sequelize.define('Alumno', {
   idAlumno: {
     type: _sequelize.DataTypes.BIGINT,
     autoIncrement: true,
@@ -53,4 +53,4 @@ var Alumno = sequelize.define('Alumno', {
   tableName: 'Alumno',
   timestamps: false
 });
-var _default = exports["default"] = Alumno;
+var _default = exports.default = Alumno;

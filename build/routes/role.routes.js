@@ -1,10 +1,11 @@
 "use strict";
 
 // routes/product.routes.js
-var express = require('express');
-var router = express.Router();
-var _require = require('../controllers/role.controller'),
-  RoleController = _require.RoleController;
+const express = require('express');
+const router = express.Router();
+const {
+  RoleController
+} = require('../controllers/role.controller');
 
 /**
  * @swagger
@@ -143,7 +144,7 @@ router.put('/:roleId', RoleController.update);
  *       400:
  *         description: Error al eliminar el rol
  */
-router["delete"]('/:roleId', RoleController["delete"]);
+router.delete('/:roleId', RoleController.delete);
 module.exports = {
   RoleRoutes: router
 };

@@ -1,13 +1,14 @@
 "use strict";
 
-var _require = require('sequelize'),
-  Sequelize = _require.Sequelize,
-  DataTypes = _require.DataTypes;
-var sequelize = new Sequelize('tesoreriadb', 'root', '', {
+const {
+  Sequelize,
+  DataTypes
+} = require('sequelize');
+const sequelize = new Sequelize('tesoreriadb', 'root', '', {
   host: 'localhost',
   dialect: 'mysql'
 });
-var Padre = sequelize.define('Padre', {
+const Padre = sequelize.define('Padre', {
   idPadre: {
     type: DataTypes.BIGINT,
     autoIncrement: true,

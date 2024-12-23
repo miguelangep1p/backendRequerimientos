@@ -1,9 +1,10 @@
 "use strict";
 
-var _require = require('sequelize'),
-  DataTypes = _require.DataTypes;
-var sequelize = require('../database');
-var Role = sequelize.define('Role', {
+const {
+  DataTypes
+} = require('sequelize');
+const sequelize = require('../database');
+const Role = sequelize.define('Role', {
   roleId: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -24,5 +25,5 @@ var Role = sequelize.define('Role', {
   }
 });
 module.exports = {
-  Role: Role
+  Role
 };
