@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.register = exports.getAllUsers = void 0;
+exports.register = exports.getAllUsers = exports.updateUser = exports.deleteUser = void 0;
 var _responseTypes = require("../utils/response-types");
 var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
 var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
@@ -12,7 +12,6 @@ var _userModel = require("../models/user.model.js");
 var _roleModel = require("../models/role.model.js");
 var _sequelize = require("sequelize");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-// Ajusta la ruta según tu estructura de directorios
 
 // Validación para el registro
 const registerSchema = _joi.default.object({
@@ -28,6 +27,7 @@ const registerSchema = _joi.default.object({
     "any.required": "La contraseña es obligatoria."
   })
 });
+
 const register = async (req, res) => {
   // Validar los datos antes de crear un usuario
   const {
@@ -63,8 +63,9 @@ const register = async (req, res) => {
     email,
     username,
     password: hashedPassword,
-    roleId: 1
+    roleId
   });
+
   try {
     const savedUser = await user.save();
     (0, _responseTypes.success)(res, {
@@ -75,6 +76,8 @@ const register = async (req, res) => {
   }
 };
 exports.register = register;
+
+
 const loginSchema = _joi.default.object({
   email: _joi.default.string().min(3).max(255).required().messages({
     "string.min": "El correo debe tener al menos {#limit} caracteres.",
@@ -85,6 +88,7 @@ const loginSchema = _joi.default.object({
     "any.required": "La contraseña es obligatoria."
   })
 });
+
 exports.login = async (req, res) => {
   const {
     error
@@ -132,6 +136,8 @@ exports.login = async (req, res) => {
     role
   });
 };
+
+
 const getAllUsers = async (req, res) => {
   try {
     const users = await _userModel.User.findAll({
@@ -150,4 +156,51 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
+
 exports.getAllUsers = getAllUsers;
+
+// Actualizar un usuario
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { email, username, password, roleId } = req.body;
+
+  try {
+    const user = await _userModel.User.findByPk(id);
+    if (!user) return (0, _responseTypes.badRequest)(res, "Usuario no encontrado.");
+
+    // Actualizar campos si están presentes
+    if (email) user.email = email;
+    if (username) user.username = username;
+    if (password) {
+      const salt = await _bcryptjs.default.genSalt(10);
+      user.password = await _bcryptjs.default.hash(password, salt);
+    }
+    if (roleId) user.roleId = roleId;
+
+    const updatedUser = await user.save();
+    (0, _responseTypes.success)(res, updatedUser);
+  } catch (err) {
+    res.status(500).send({
+      message: "Error al actualizar el usuario: " + err.message
+    });
+  }
+};
+exports.updateUser = updateUser;
+
+// Eliminar un usuario
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const user = await _userModel.User.findByPk(id);
+    if (!user) return (0, _responseTypes.badRequest)(res, "Usuario no encontrado.");
+
+    await user.destroy();
+    (0, _responseTypes.success)(res, { message: "Usuario eliminado exitosamente." });
+  } catch (err) {
+    res.status(500).send({
+      message: "Error al eliminar el usuario: " + err.message
+    });
+  }
+};
+exports.deleteUser = deleteUser;
