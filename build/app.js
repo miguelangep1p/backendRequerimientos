@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
+const paypal = require("@paypal/checkout-server-sdk");
 const {
   createDefaultData
 } = require("./utils/data-default");
@@ -69,6 +70,54 @@ const swaggerOptions = {
   },
   apis: ["./src/routes/*.js"]
 };
+const environment = new paypal.core.SandboxEnvironment(
+  process.env.PAYPAL_CLIENT_ID,
+  process.env.PAYPAL_CLIENT_SECRET
+);
+const client = new paypal.core.PayPalHttpClient(environment);
+
+// Endpoint para crear una orden de PayPal
+app.post("/api/paypal/create-order", async (req, res) => {
+  const { amount, currency } = req.body;
+
+  const request = new paypal.orders.OrdersCreateRequest();
+  request.prefer("return=representation");
+  request.requestBody({
+    intent: "CAPTURE",
+    purchase_units: [
+      {
+        amount: {
+          currency_code: currency || "USD",
+          value: amount || "10.00", // Monto predeterminado
+        },
+      },
+    ],
+  });
+
+  try {
+    const order = await client.execute(request);
+    res.status(200).json({ id: order.result.id });
+  } catch (error) {
+    console.error("Error al crear la orden:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Endpoint para capturar una orden de PayPal
+app.post("/api/paypal/capture-order", async (req, res) => {
+  const { orderId } = req.body;
+
+  const request = new paypal.orders.OrdersCaptureRequest(orderId);
+  request.requestBody({});
+
+  try {
+    const capture = await client.execute(request);
+    res.status(200).json({ capture: capture.result });
+  } catch (error) {
+    console.error("Error al capturar la orden:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
