@@ -154,6 +154,9 @@ router.get("/users", getAllUsers);
  *               password:
  *                 type: string
  *                 example: "newpassword123"
+ *               roleId: 
+ *                  type: integer    
+ *                  example: 1
  *     responses:
  *       200:
  *         description: Usuario actualizado exitosamente

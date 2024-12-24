@@ -132,8 +132,13 @@ const updateUserSchema = Joi.object({
   }),
   password: Joi.string().min(6).max(1024).messages({
     "string.min": "La contraseña debe tener al menos {#limit} caracteres."
-  })
+  }),
+  roleId: Joi.number().integer().messages({
+    "number.base": "El rol de usuario debe ser un número.",
+    "number.integer": "El rol de usuario debe ser un número entero."
+  }),
 });
+
 
 export const updateUser = async (req, res) => {
   const { id } = req.params; // ID del usuario a actualizar
@@ -142,7 +147,7 @@ export const updateUser = async (req, res) => {
   const { error } = updateUserSchema.validate(req.body);
   if (error) return badRequest(res, error.details[0].message);
 
-  const { email, username, password } = req.body;
+  const { email, username, password, roleId } = req.body;
 
   try {
     // Buscar el usuario por ID
@@ -161,6 +166,12 @@ export const updateUser = async (req, res) => {
       if (usernameExist) return badRequest(res, "El nombre de usuario ya está registrado");
     }
 
+    // Verificar si el roleId es válido (opcional, si tienes una tabla de roles)
+    if (roleId && roleId !== user.roleId) {
+      const roleExist = await Role.findOne({ where: { roleId } });
+      if (!roleExist) return badRequest(res, "El roleId proporcionado no existe.");
+    }
+
     // Actualizar los datos del usuario
     if (email) user.email = email;
     if (username) user.username = username;
@@ -168,13 +179,16 @@ export const updateUser = async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
     }
+    if (roleId) user.roleId = roleId;
 
     const updatedUser = await user.save();
-    success(res, updatedUser);
+    const { password: _, ...userWithoutPassword } = updatedUser.toJSON(); // Excluir la contraseña en la respuesta
+    success(res, userWithoutPassword);
   } catch (err) {
     res.status(500).send({ message: "Error al actualizar el usuario: " + err.message });
   }
 };
+
 
 // Método para eliminar un usuario
 export const deleteUser = async (req, res) => {
