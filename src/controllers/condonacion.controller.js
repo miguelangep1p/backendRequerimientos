@@ -1,3 +1,4 @@
+const mysql = require('mysql');
 const Condonacion = require('../models/Condonacion');
 const Deuda = require('../models/Deuda'); // Asegúrate de tener este modelo y que esté correctamente asociado.
 
